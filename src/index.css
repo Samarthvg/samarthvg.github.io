@@ -1,0 +1,335 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root,
+  [data-theme='dark'] {
+    --c-ink: 23 21 18;
+    --c-panel: 29 26 22;
+    --c-raised: 36 32 27;
+    --c-bone: 216 209 194;
+    --c-muted: 142 133 118;
+    --c-faint: 102 95 84;
+    --c-accent: 152 180 124;
+    --c-accent2: 176 164 200;
+    --c-line: rgba(216, 209, 194, 0.11);
+    --c-line2: rgba(216, 209, 194, 0.2);
+    --c-grain: 0.03;
+  }
+
+  [data-theme='light'] {
+    --c-ink: 228 220 203;
+    --c-panel: 221 212 193;
+    --c-raised: 213 203 181;
+    --c-bone: 60 54 46;
+    --c-muted: 124 116 102;
+    --c-faint: 164 155 140;
+    --c-accent: 96 122 72;
+    --c-accent2: 106 94 140;
+    --c-line: rgba(60, 54, 46, 0.15);
+    --c-line2: rgba(60, 54, 46, 0.27);
+    --c-grain: 0.022;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+    background: rgb(var(--c-ink));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    @apply bg-ink text-bone font-sans antialiased;
+    overflow-x: clip;
+    font-feature-settings: 'cv11' 1, 'ss03' 1;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  section {
+    scroll-margin-top: 96px;
+  }
+
+  ::selection {
+    background: rgb(var(--c-accent));
+    color: rgb(var(--c-ink));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-accent));
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(var(--c-ink));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--c-faint) / 0.5);
+    border-radius: 99px;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-[1240px] px-6 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[10px] uppercase tracking-[0.24em] text-muted sm:text-[11px];
+  }
+
+  .display {
+    @apply font-sans font-semibold uppercase leading-[0.88] tracking-tightest;
+  }
+
+  .icon-btn {
+    @apply inline-flex items-center justify-center border border-line text-muted transition-colors duration-300 hover:border-accent hover:text-accent;
+  }
+
+  .sr-only-focusable:not(:focus) {
+    @apply sr-only;
+  }
+}
+
+@layer utilities {
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: var(--c-grain);
+  }
+  .dotgrid {
+    background-image: radial-gradient(rgb(var(--c-bone) / 0.16) 1px, transparent 1px);
+    background-size: 34px 34px;
+  }
+}
+
+/* ── ambient petals ──────────────────────────────── */
+.petal-field .fall {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  animation: petal-drift var(--dur) linear var(--delay) infinite;
+  will-change: transform;
+}
+.petal-field .sway {
+  animation: petal-sway var(--sway-dur) ease-in-out var(--delay) infinite alternate;
+  will-change: transform;
+}
+.petal-field .leaf {
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50% 0 50% 50%;
+  background: rgb(var(--c-accent2) / var(--o));
+}
+
+@keyframes petal-drift {
+  0% {
+    transform: translate3d(0, -14vh, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(0, 114vh, 0) rotate(var(--spin));
+  }
+}
+@keyframes petal-sway {
+  0% {
+    transform: translate3d(-1.6vw, 0, 0);
+  }
+  100% {
+    transform: translate3d(1.6vw, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petal-field {
+    display: none;
+  }
+}
+
+/* ── staff ───────────────────────────────────────── */
+/* Motes lifting off the orb, and a slow breath on the glass and the halo.
+   Transform and opacity only, so all of it stays on the compositor and none
+   of it triggers layout. */
+.mote {
+  position: absolute;
+  line-height: 1;
+  opacity: 0;
+  /* rasterised once into its own layer, so the glow costs nothing per frame */
+  text-shadow: 0 0 7px currentColor;
+  will-change: transform, opacity;
+  animation: mote-rise var(--dur) ease-out var(--delay) infinite;
+}
+
+@keyframes mote-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.55);
+  }
+  25%,
+  62% {
+    opacity: var(--o);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dx), calc(-1 * var(--rise)), 0) scale(1);
+  }
+}
+
+.staff-gem {
+  animation: gem-breathe 5.5s ease-in-out infinite;
+}
+@keyframes gem-breathe {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.staff-halo {
+  animation: halo-breathe 7s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+@keyframes halo-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translate3d(-50%, 0, 0) scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .staff-motes {
+    display: none;
+  }
+  .staff-gem,
+  .staff-halo {
+    animation: none;
+  }
+}
+
+/* ── menacing marks ──────────────────────────────── */
+.rumble {
+  animation: rumble var(--dur) ease-in-out var(--delay) infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes rumble {
+  0%,
+  100% {
+    opacity: 0.14;
+    transform: translate3d(0, 2px, 0) scale(0.92);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate3d(0, -3px, 0) scale(1);
+  }
+}
+
+/* ── cursor ──────────────────────────────────────── */
+/* The brooch replaces the pointer; petals fall behind it. */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+/* Two stacked masked layers on a shared 108x120 canvas. Each mask is opaque
+   where it paints, so the cursor is solid; the two tones come from the fills,
+   not from alpha. */
+.brooch-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 19px;
+  height: 21.11px;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.25s ease;
+  /* enough separation to stay readable over the hero photograph */
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.4));
+}
+.brooch-cursor span {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transition: scale 0.18s ease;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+/* the shell. Raised rather than ground colour so it reads as a solid object
+   sitting on the page instead of a hole cut through it, while keeping the
+   dark-body-to-bright-wings relationship the original sticker had. */
+.brooch-cursor .body {
+  background: rgb(var(--c-raised));
+  -webkit-mask-image: url('/brooch-body.png');
+  mask-image: url('/brooch-body.png');
+}
+/* wings, eyes and dot, re-tinting with the theme */
+.brooch-cursor .face {
+  background: rgb(var(--c-accent));
+  -webkit-mask-image: url('/brooch.png');
+  mask-image: url('/brooch.png');
+}
+/* Keeps the hover affordance the native cursor would have given. Scales the
+   layers, not the host: the standalone scale property applies outside
+   transform, so scaling the host multiplied its translation and threw the
+   cursor a third of the way further from the origin. The layers carry no
+   translation of their own, so they are safe to scale. */
+.brooch-cursor[data-over='true'] span {
+  scale: 1.1;
+}
+
+.petal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50% 0 50% 50%;
+  background: rgb(var(--c-accent2));
+  will-change: transform, opacity;
+  opacity: 0;
+  transform: translate3d(var(--px), var(--py), 0);
+}
+
+@keyframes petal-fall {
+  0% {
+    opacity: 0.85;
+    transform: translate3d(var(--px), var(--py), 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(var(--px) + var(--dx)), calc(var(--py) + var(--dy)), 0)
+      rotate(var(--rot)) scale(0.75);
+  }
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171512" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      /* pre-paint theme + accent — mirrors src/lib/theme.js */
+      (function () {
+        var A = [
+          ['152 180 124', '96 122 72'],
+          ['140 172 194', '78 112 138'],
+          ['176 164 200', '106 94 140'],
+          ['208 156 158', '154 92 96'],
+          ['214 186 128', '140 106 44'],
+        ]
+        var r = document.documentElement
+        try {
+          var t = localStorage.getItem('theme')
+          if (t !== 'light' && t !== 'dark')
+            t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+          var i = parseInt(localStorage.getItem('accent'), 10)
+          if (!(i >= 0 && i < A.length)) i = 0
+          var k = t === 'dark' ? 0 : 1
+          r.dataset.theme = t
+          r.dataset.accent = String(i)
+          r.style.colorScheme = t
+          r.style.setProperty('--c-accent', A[i][k])
+          r.style.setProperty('--c-accent2', A[(i + 1) % A.length][k])
+        } catch (e) {
+          r.dataset.theme = 'dark'
+        }
+      })()
+    </script>
+    <meta name="description" content="Samarth Galchar — Software Engineer working across AI, generative AI and product engineering. Boston, MA." />
+    <title>Samarth Galchar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
