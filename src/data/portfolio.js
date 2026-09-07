@@ -16,7 +16,7 @@ export const profile = {
 
 export const links = {
   email: 'galchar.sa@northeastern.edu',
-  github: 'https://github.com/samarthvg',
+  github: 'https://github.com/Samarthvg',
   linkedin: 'https://www.linkedin.com/in/samarthgalchar',
   // Vite rewrites public-asset URLs in CSS and HTML for you, but not ones
   // written as strings in JS. BASE_URL keeps this right if the site is ever
