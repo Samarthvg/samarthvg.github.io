@@ -7,9 +7,9 @@ export default function OffTheClock() {
         <span className="eyebrow shrink-0 !text-accent lg:pt-px">Off the clock</span>
 
         <div className="flex flex-1 flex-col gap-4 text-[15px] leading-relaxed text-muted sm:flex-row sm:gap-10 sm:text-base">
-          <p className="flex-1">{offTheClock.learning}</p>
-          <p className="flex-1">
-            Lately{' '}
+          <p className="flex">[i] {offTheClock.learning}</p>
+          <p className="flex-1">[ii]
+            {' '}
             <span className="font-serif italic text-bone">
               {offTheClock.onLoop.join(' and ')}
             </span>{' '}
@@ -17,10 +17,10 @@ export default function OffTheClock() {
           </p>
         </div>
 
-        <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+        {/* <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
           <span className="text-bone">{offTheClock.dota.hours.toLocaleString()}</span>
           <span className="text-accent">+</span> {offTheClock.dota.label}
-        </p>
+        </p> */}
       </div>
     </section>
   )

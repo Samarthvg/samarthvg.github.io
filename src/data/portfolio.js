@@ -9,9 +9,11 @@ export const profile = {
   roles: ['Software Engineer', 'ML / Gen AI'],
   location: 'Boston, MA',
   status: 'Open to full-time roles',
+  // taglineAccent has to appear verbatim in the tagline; Hero splits on it to
+  // set the emphasis, and silently renders no emphasis if it does not match.
   tagline:
-    'Preoccupied with a single leaf you won’t see the tree, preoccupied with a single tree you’ll miss the entire forest',
-  taglineAccent: 'occasionally behaves',
+    'A software engineer who reads the source before the docs and the stack trace before the search bar.',
+  taglineAccent: 'the source before the docs',
 }
 
 export const links = {
@@ -257,6 +259,6 @@ export const skills = [
 
 export const offTheClock = {
   onLoop: ['King Crimson', 'Nujabes'],
-  learning: 'Currently working out Stable Diffusion, mostly how to train a LoRA worth keeping.',
+  learning: 'Currently working out Low-Rank Adaptation in stable diffusion.',
   dota: { hours: 10000, label: 'hours in Dota 2' },
 }
