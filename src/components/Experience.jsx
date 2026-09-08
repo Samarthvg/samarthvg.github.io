@@ -27,7 +27,7 @@ export default function Experience() {
   return (
     <section id="experience" className="relative py-24 sm:py-32 lg:py-40">
       <div className="shell">
-        <SectionHead index="02" title="Experience" note="Hover over an org" />
+        <SectionHead index="02" title="Experience" note="Hover / Click" />
 
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-14">
           {/* selector */}
