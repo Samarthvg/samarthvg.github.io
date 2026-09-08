@@ -12,6 +12,25 @@ export const ACCENTS = [
   { name: 'gold', dark: '214 186 128', light: '140 106 44' },
 ]
 
+/**
+ * Read-only view of the current theme, for components that need to render
+ * differently in each but must not own the toggle. Watching the attribute
+ * rather than calling useTheme keeps a single source of truth: a second
+ * useTheme would spin up its own state and drift out of sync with the navbar's.
+ */
+export function useThemeName() {
+  const [name, setName] = useState(() => document.documentElement.dataset.theme || 'dark')
+  useEffect(() => {
+    const root = document.documentElement
+    const read = () => setName(root.dataset.theme || 'dark')
+    read()
+    const mo = new MutationObserver(read)
+    mo.observe(root, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => mo.disconnect()
+  }, [])
+  return name
+}
+
 export function useTheme() {
   const [theme, setTheme] = useState(() => document.documentElement.dataset.theme || 'dark')
   const [index, setIndex] = useState(() => Number(document.documentElement.dataset.accent) || 0)

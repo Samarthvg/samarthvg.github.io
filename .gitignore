@@ -4,3 +4,7 @@ dist
 *.local
 .vite
 .claude
+# source art and the scripts that key it; only the generated ASCII ships
+refs
+tools
+staff_mask.png
