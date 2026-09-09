@@ -195,6 +195,56 @@
   }
 }
 
+/* ── scene backdrops ─────────────────────────────── */
+/* Toned to sit under the type rather than behind it: most of the way to
+   monochrome, warmed back toward the palette's base, and held at a low enough
+   opacity that the page ground still reads through. */
+.scene {
+  filter: grayscale(0.62) sepia(0.3) saturate(0.85) contrast(1.02) brightness(0.75);
+}
+/* Not brightened. These are dark scenes, and lifting one on cream paper leaves
+   a grey smudge with no detail; holding the darks down and pushing contrast
+   instead reads as a print on the page. */
+[data-theme='light'] .scene {
+  filter: grayscale(0.6) sepia(0.38) saturate(0.85) contrast(1.2) brightness(0.9);
+}
+
+/* Both themes run at the same strength. The light theme was originally held
+   back because dark text on paper has less contrast to give away, but that
+   left the scene looking washed out; lifting the copy over it to bone/90
+   instead buys the headroom, and measures above 4.5:1 at these values.
+   The moving clip is fainter than the still because motion draws the eye on
+   its own. */
+.scene--motion {
+  opacity: 0.24;
+}
+.scene--still {
+  opacity: 0.3;
+}
+
+/* Fades into the page top and bottom instead of ending on an edge, so the band
+   reads as part of the section rather than as an inset panel. It runs the full
+   width deliberately. --scene-fade is per instance: a short band needs a longer
+   fade to stay quiet, a tall one can hold a harder edge. */
+.scene-frame {
+  --scene-fade-top: 18%;
+  --scene-fade-bottom: 18%;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--scene-fade-top),
+    black calc(100% - var(--scene-fade-bottom)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--scene-fade-top),
+    black calc(100% - var(--scene-fade-bottom)),
+    transparent
+  );
+}
+
 .staff-gem {
   animation: gem-breathe 5.5s ease-in-out infinite;
 }
