@@ -67,7 +67,7 @@ function MailNote() {
 
 const channels = [
   { label: 'LinkedIn', href: links.linkedin, icon: Linkedin, hint: '/in/samarthgalchar' },
-  { label: 'GitHub', href: links.github, icon: Github, hint: '@samarthgalchar' },
+  { label: 'GitHub', href: links.github, icon: Github, hint: '@samarthvg' },
   { label: 'Resume', href: links.resume, icon: FileText, hint: 'PDF' },
 ]
 

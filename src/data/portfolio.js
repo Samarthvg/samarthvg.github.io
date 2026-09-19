@@ -12,8 +12,8 @@ export const profile = {
   // taglineAccent has to appear verbatim in the tagline; Hero splits on it to
   // set the emphasis, and silently renders no emphasis if it does not match.
   tagline:
-    'A software engineer who reads the source before the docs and the stack trace before the search bar.',
-  taglineAccent: 'the source before the docs',
+    'Recent graduate with a Master’s in Computer Science from Northeastern University, looking for opportunities in software engineering and deep learning.',
+  taglineAccent: 'software engineering and deep learning',
 }
 
 export const links = {
@@ -36,7 +36,7 @@ export const nav = [
 
 export const about = {
   statement: [
-    'Three years shipping production web products, plus a research track in applied machine learning. Most of what I build now sits between the two.',
+    'More than a year of shipping web applications, and a research track in deep learning. Most of what I build now sits between the two.',
     'With experience in full-stack web development, REST and microservices, ML pipelines, RAG systems, and computer vision.',
   ],
   specs: [
