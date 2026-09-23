@@ -27,7 +27,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # enablement turns Pages on if it is off. Flipping the repository to
+      # private and back drops the Pages configuration silently, and the site
+      # then 404s until someone reopens the settings; this lets a run restore
+      # it on its own.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
