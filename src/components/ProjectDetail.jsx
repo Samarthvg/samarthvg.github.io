@@ -62,7 +62,7 @@ export default function ProjectDetail({ project: p, onClose }) {
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <ProjectVisual kind={p.visual} className="h-[180px] sm:h-[260px]" />
+          <ProjectVisual kind={p.visual} shot={p.shot} className="h-[180px] sm:h-[260px]" />
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}

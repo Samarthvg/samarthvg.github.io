@@ -186,7 +186,7 @@ function ProjectCard({ project: p, active, onSelect }) {
         </span>
       </div>
 
-      <ProjectVisual kind={p.visual} className="h-[190px] shrink-0 sm:h-[220px]" />
+      <ProjectVisual kind={p.visual} shot={p.shot} className="h-[190px] shrink-0 sm:h-[220px]" />
 
       <div className="flex flex-1 flex-col justify-between px-5 pb-6 pt-6 sm:px-7 sm:pb-7">
         <div>

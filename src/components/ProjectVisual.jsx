@@ -1,3 +1,5 @@
+import { useThemeName } from '../lib/theme'
+
 const W = 480
 const H = 240
 const A = 'rgb(var(--c-accent))'
@@ -298,7 +300,36 @@ const MAP = {
   system: System,
 }
 
-export default function ProjectVisual({ kind, className = '' }) {
+/**
+ * Drawn artwork by default; a real screenshot where a project has one.
+ *
+ * `shot` may be a single path or { dark, light }. The pair exists because a
+ * screenshot carries its own brightness: a cream UI blazes against the dark
+ * theme and a near-black one punches a hole in the light theme. Where a
+ * project ships both skins, the shot follows the site's theme instead, and the
+ * grade in .shot only has to pull the hue into the palette.
+ *
+ * A project with only one skin therefore falls back to the drawing in the
+ * other theme rather than showing a screenshot fighting the page.
+ */
+export default function ProjectVisual({ kind, shot, className = '' }) {
+  const theme = useThemeName()
+  const src = typeof shot === 'string' ? shot : shot && shot[theme]
+
+  if (src) {
+    return (
+      <div className={`relative overflow-hidden bg-raised ${className}`} aria-hidden="true">
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="shot h-full w-full object-cover object-top"
+        />
+      </div>
+    )
+  }
+
   const Art = MAP[kind] || Retrieval
   return (
     <div className={`relative overflow-hidden bg-raised ${className}`} aria-hidden="true">

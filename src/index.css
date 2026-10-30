@@ -195,6 +195,16 @@
   }
 }
 
+/* ── project screenshots ─────────────────────────── */
+/* A far lighter grade than the scene backdrops. These sit in a card at full
+   strength rather than under type, so the job is only to pull the interface's
+   own hues toward the palette; the heavy desaturation used on the scenes would
+   leave the UI unreadable. Each screenshot is already theme-matched by
+   ProjectVisual, so there is no brightness correction to make here. */
+.shot {
+  filter: grayscale(0.4) sepia(0.2) saturate(0.9) contrast(1.02);
+}
+
 /* ── scene backdrops ─────────────────────────────── */
 /* Toned to sit under the type rather than behind it: most of the way to
    monochrome, warmed back toward the palette's base, and held at a low enough
