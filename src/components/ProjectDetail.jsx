@@ -62,7 +62,17 @@ export default function ProjectDetail({ project: p, onClose }) {
         </div>
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          <ProjectVisual kind={p.visual} shot={p.shot} className="h-[180px] sm:h-[260px]" />
+          {/* 2:1 to match the artwork and the screenshots, rather than a fixed
+              height. At a fixed 260px this slot ran past 4:1 on a wide overlay,
+              and cover then showed only the middle half of the frame: on a
+              stacked figure that is the seam between the two plots, blown up.
+              contain keeps the whole frame when the cap bites. */}
+          <ProjectVisual
+            kind={p.visual}
+            shot={p.shot}
+            fit="contain"
+            className="aspect-[2/1] max-h-[min(42vh,400px)]"
+          />
 
           <motion.div
             initial={{ opacity: 0, y: 18 }}

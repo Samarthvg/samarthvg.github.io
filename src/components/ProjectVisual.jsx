@@ -312,7 +312,7 @@ const MAP = {
  * A project with only one skin therefore falls back to the drawing in the
  * other theme rather than showing a screenshot fighting the page.
  */
-export default function ProjectVisual({ kind, shot, className = '' }) {
+export default function ProjectVisual({ kind, shot, fit = 'cover', className = '' }) {
   const theme = useThemeName()
   const src = typeof shot === 'string' ? shot : shot && shot[theme]
 
@@ -324,7 +324,9 @@ export default function ProjectVisual({ kind, shot, className = '' }) {
           alt=""
           loading="lazy"
           decoding="async"
-          className="shot h-full w-full object-cover object-top"
+          className={`shot h-full w-full ${
+            fit === 'contain' ? 'object-contain' : 'object-cover object-top'
+          }`}
         />
       </div>
     )
