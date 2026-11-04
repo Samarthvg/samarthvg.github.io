@@ -124,7 +124,7 @@ export const projects = [
     index: '02',
     name: 'Farm Ledger',
     kicker: 'Cloudflare Workers · Hindi-first',
-    tagline: 'Built so a client’s mother can keep the farm books from her phone.',
+    tagline: 'Built so an older woman can keep the farm books from her phone.',
     description:
       'An expense and income ledger for a working farm, written for someone who is not going to fight an interface. Hindi by default, one category tile and one big keypad at a time, and entries that survive a dead signal. Behind it sits an owner’s dashboard: season totals, year-over-year comparison, cost per kilo sold, and an audit trail of every change.',
     highlights: [
