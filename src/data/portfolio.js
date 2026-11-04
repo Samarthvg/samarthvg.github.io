@@ -124,9 +124,9 @@ export const projects = [
     index: '02',
     name: 'Farm Ledger',
     kicker: 'Cloudflare Workers · Hindi-first',
-    tagline: 'Built so an older woman can keep the farm books from her phone.',
+    tagline: 'Large type, one tap at a time, so the farm books fit on a phone.',
     description:
-      'An expense and income ledger for a working farm, written for someone who is not going to fight an interface. Hindi by default, one category tile and one big keypad at a time, and entries that survive a dead signal. Behind it sits an owner’s dashboard: season totals, year-over-year comparison, cost per kilo sold, and an audit trail of every change.',
+      'An expense and income ledger for a working farm, built for elderly users and poor eyesight rather than for people who are comfortable with apps. Hindi by default, large type, one category tile and one big keypad at a time, and entries that survive a dead signal. Behind it sits an owner’s dashboard: season totals, year-over-year comparison, cost per kilo sold, and an audit trail of every change.',
     highlights: [
       'Entry flow is one decision per screen, Hindi by default with English a tap away',
       'Offline-first: entries and bill photos queue on the phone and sync on reconnect, with ids minted client-side so a retry cannot duplicate',
