@@ -28,13 +28,16 @@ export function Reveal({ children, delay = 0, y = 18, className = '', as = 'div'
  */
 export function SectionHeading({ title, meta, sub, className = '' }) {
   return (
-    <Reveal className={className}>
+    // Deliberately not revealed. Five sections each sliding their title up on
+    // arrival is one entrance repeated, not motion; the heading is simply
+    // there, and what settles in under it is the content.
+    <div className={className}>
       <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
         <h2 className="heading">{title}</h2>
         {meta && <span className="meta pb-2 text-faint">{meta}</span>}
       </div>
       {sub && <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-muted">{sub}</p>}
-    </Reveal>
+    </div>
   )
 }
 
