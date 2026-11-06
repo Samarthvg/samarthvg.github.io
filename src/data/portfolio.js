@@ -100,7 +100,6 @@ export const experience = [
 export const projects = [
   {
     id: 'onward',
-    featured: true,
     index: '01',
     name: 'Onward',
     kicker: 'Desktop app · Open source',
@@ -122,7 +121,6 @@ export const projects = [
   },
   {
     id: 'farmhouse',
-    featured: true,
     index: '02',
     name: 'Farm Ledger',
     kicker: 'Cloudflare Workers · Hindi-first',
@@ -144,7 +142,6 @@ export const projects = [
   },
   {
     id: 'ai-thelete',
-    featured: true,
     index: '03',
     name: 'AI-thelete',
     kicker: 'Retrieval-Augmented Generation',
@@ -164,7 +161,6 @@ export const projects = [
   },
   {
     id: 'cmapss',
-    featured: true,
     index: '04',
     name: 'Remaining Useful Life',
     kicker: 'NASA C-MAPSS · arXiv:2604.27234',
@@ -185,7 +181,6 @@ export const projects = [
   },
   {
     id: 'vision',
-    featured: true,
     index: '05',
     name: 'Deepfake Detection',
     kicker: 'Pattern Recognition & Computer Vision',
@@ -276,7 +271,7 @@ export const skills = [
   {
     id: 'frontend',
     label: 'Frontend',
-    items: ['React', 'Vue', 'Angular', 'Tailwind'],
+    items: ['React', 'Vue', 'Angular', 'HTML5', 'CSS3', 'Bootstrap'],
   },
   {
     id: 'backend',

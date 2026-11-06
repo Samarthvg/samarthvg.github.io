@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 export const EASE = [0.16, 1, 0.3, 1]
 
 /** Scroll-triggered reveal wrapper. */
-export function Reveal({ children, delay = 0, y = 18, className = '', as = 'div' }) {
+export function Reveal({ children, delay = 0, y = 20, className = '', as = 'div' }) {
   const Tag = motion[as] || motion.div
   return (
     <Tag
@@ -11,43 +11,23 @@ export function Reveal({ children, delay = 0, y = 18, className = '', as = 'div'
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-12% 0px -8% 0px' }}
-      transition={{ duration: 0.7, ease: EASE, delay }}
+      transition={{ duration: 0.65, ease: EASE, delay }}
     >
       {children}
     </Tag>
   )
 }
 
-/**
- * A section heading and, optionally, the one fact worth putting beside it.
- *
- * No index numeral and no label above the title: the sequence carries no
- * information the reader needs, and a heading this size does not need
- * announcing. `meta` is for real data — a count, a span of years — never for
- * instructions on how to work the controls.
- */
-export function SectionHeading({ title, meta, sub, className = '' }) {
+/** Section label: index, title, rule, optional note. */
+export function SectionHead({ index, title, note }) {
   return (
-    // Deliberately not revealed. Five sections each sliding their title up on
-    // arrival is one entrance repeated, not motion; the heading is simply
-    // there, and what settles in under it is the content.
-    <div className={className}>
-      <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-        <h2 className="heading">{title}</h2>
-        {meta && <span className="meta pb-2 text-faint">{meta}</span>}
-      </div>
-      {sub && <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-muted">{sub}</p>}
-    </div>
+    <Reveal className="mb-12 flex items-baseline gap-4 sm:mb-16 md:gap-6">
+      <span className="font-mono text-[11px] text-accent sm:text-xs">{index}</span>
+      <h2 className="eyebrow !text-bone">{title}</h2>
+      <span className="h-px flex-1 translate-y-[-3px] bg-line" aria-hidden="true" />
+      {note && <span className="eyebrow hidden sm:block">{note}</span>}
+    </Reveal>
   )
-}
-
-/**
- * A drawn separator rather than a slash or a middot. Several of the strings
- * it sits between contain their own punctuation ("ML / Gen AI", "Boston, MA"),
- * and a glyph separator disappears into them.
- */
-export function Divider({ className = '' }) {
-  return <span aria-hidden="true" className={`h-3.5 w-px shrink-0 bg-line2 ${className}`} />
 }
 
 /** Understated bordered icon link. */
@@ -69,7 +49,7 @@ export function IconLink({ href, label, icon: Icon, external = true, size = 'md'
   )
 }
 
-/** Text link with an icon, for source and demo. */
+/** Bordered link chip used by project cards and the detail panel. */
 export function LinkChip({ href, icon: Icon, label }) {
   return (
     <a
@@ -77,35 +57,24 @@ export function LinkChip({ href, icon: Icon, label }) {
       target="_blank"
       rel="noreferrer noopener"
       onClick={(e) => e.stopPropagation()}
-      className="group inline-flex items-center gap-2 text-sm text-muted transition-colors duration-300 hover:text-accent"
+      className="inline-flex items-center gap-2 border border-line px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted transition-colors duration-300 hover:border-accent hover:text-accent"
     >
-      <Icon size={13} strokeWidth={1.7} className="shrink-0" />
-      <span className="border-b border-transparent pb-px transition-colors duration-300 group-hover:border-accent/60">
-        {label}
-      </span>
+      <Icon size={12} strokeWidth={1.7} />
+      {label}
     </a>
   )
 }
 
-/**
- * The build manifest. Monospace because these are literal package names
- * rendered as written, not because the section wants to look technical —
- * hence natural case and no tracking.
- */
+/** Monospace tech list, dot separated. */
 export function StackList({ items, className = '' }) {
   return (
-    <ul className={`flex flex-wrap items-center gap-x-2.5 gap-y-1 ${className}`}>
+    <ul className={`flex flex-wrap items-center gap-x-3 gap-y-1.5 ${className}`}>
       {items.map((t, i) => (
-        // The separator trails its own item rather than leading the next one,
-        // so a wrap leaves "MongoDB /" at the end of a line instead of
-        // starting the next one with a slash.
-        <li key={t} className="flex items-center gap-2.5 font-mono text-[11px] text-muted sm:text-xs">
-          <span>{t}</span>
-          {i < items.length - 1 && (
-            <span className="text-faint/70" aria-hidden="true">
-              /
-            </span>
-          )}
+        <li key={t} className="flex items-center gap-3">
+          {i > 0 && <span className="h-1 w-1 rounded-full bg-faint" aria-hidden="true" />}
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted sm:text-[11px]">
+            {t}
+          </span>
         </li>
       ))}
     </ul>

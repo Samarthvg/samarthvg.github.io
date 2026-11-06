@@ -27,20 +27,26 @@ export default function OffTheClock() {
         />
       </div>
 
-      <div className="shell relative flex min-h-[190px] flex-col justify-center gap-6 py-11 sm:min-h-[210px] lg:flex-row lg:items-center lg:gap-14">
-        <span className="field shrink-0 !text-accent lg:w-[108px]">Off the clock</span>
+      <div className="shell relative flex min-h-[190px] flex-col justify-center gap-6 py-10 sm:min-h-[210px] lg:flex-row lg:items-center lg:gap-10">
+        <span className="eyebrow shrink-0 !text-accent">Off the clock</span>
 
         {/* bone rather than muted: over the band, muted measures about 3.0:1 in
             the dark theme and 2.6:1 in the light, where bone/90 stays above 4.5 */}
-        <div className="flex flex-1 flex-col gap-5 text-[15px] leading-relaxed text-bone/90 sm:flex-row sm:gap-14 sm:text-base">
-          <p className="flex-1">{offTheClock.learning}</p>
-          <p className="flex-1">
-            <span className="font-serif text-lg italic text-bone sm:text-xl">
+        <div className="flex flex-1 flex-col gap-4 text-[15px] leading-relaxed text-bone/90 sm:flex-row sm:gap-10 sm:text-base">
+          <p className="flex">[i] {offTheClock.learning}</p>
+          <p className="flex-1">[ii]
+            {' '}
+            <span className="font-serif italic text-bone">
               {offTheClock.onLoop.join(' and ')}
             </span>{' '}
             on loop.
           </p>
         </div>
+
+        {/* <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+          <span className="text-bone">{offTheClock.dota.hours.toLocaleString()}</span>
+          <span className="text-accent">+</span> {offTheClock.dota.label}
+        </p> */}
       </div>
     </section>
   )

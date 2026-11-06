@@ -1,8 +1,8 @@
 ﻿import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, FileText, Github, Linkedin } from 'lucide-react'
 import { links, profile } from '../data/portfolio'
-import { Divider, EASE, Reveal } from './ui'
+import { EASE, Reveal, SectionHead } from './ui'
 import Approaching from './Approaching'
 
 /** No backend — this composes the mail and hands it to the visitor's client. */
@@ -22,11 +22,9 @@ function MailNote() {
   return (
     // the right column is reserved rather than inserted, so the field does not
     // resize under the cursor when he shows up
-    <form onSubmit={send} className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_250px]">
+    <form onSubmit={send} className="mt-5   grid gap-8 lg:grid-cols-[minmax(0,1fr)_250px]">
       <div>
-        <label htmlFor="say" className="field">
-          Or start the message here
-        </label>
+
         <div className="mt-3 flex items-center gap-3 border-b border-line2 pb-2 transition-colors duration-300 focus-within:border-accent">
           <input
             id="say"
@@ -40,13 +38,14 @@ function MailNote() {
           <button
             type="submit"
             disabled={!msg.trim()}
-            className="shrink-0 text-sm text-accent transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-30"
+            className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-accent transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-30"
           >
-            Send
+            Send →
           </button>
         </div>
-        <p className="mt-3 text-[13px] text-faint">
-          Opens your own mail client. Nothing is stored here.
+
+        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+          Opens your mail client, nothing is stored here
         </p>
       </div>
 
@@ -67,71 +66,80 @@ function MailNote() {
 }
 
 const channels = [
-  { label: 'LinkedIn', href: links.linkedin, hint: '/in/samarthgalchar' },
-  { label: 'GitHub', href: links.github, hint: '@samarthvg' },
-  { label: 'Résumé', href: links.resume, hint: 'PDF' },
+  { label: 'LinkedIn', href: links.linkedin, icon: Linkedin, hint: '/in/samarthgalchar' },
+  { label: 'GitHub', href: links.github, icon: Github, hint: '@samarthvg' },
+  { label: 'Resume', href: links.resume, icon: FileText, hint: 'PDF' },
 ]
-
-const [user, host] = links.email.split('@')
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative pb-14 pt-24 sm:pt-28 lg:pt-32">
+    <section id="contact" className="relative pb-14 pt-24 sm:pt-32 lg:pt-40">
       <div className="shell">
-        {/* The address is the headline. A page that ends on "Let's talk" is
-            asking; a page that ends on the address has already answered. */}
+        <SectionHead index="05" title="Contact" note={profile.status} />
+
         <Reveal>
-          <a href={`mailto:${links.email}`} className="group block" aria-label={`Email ${links.email}`}>
-            {/* One line on a wide window; on a narrow one it is allowed to
-                break after the @ and nowhere else, so the address never
-                shatters mid-word the way a character-level break does. */}
-            <span className="display text-[clamp(1.55rem,4.9vw,4.4rem)] text-bone transition-colors duration-500 group-hover:text-accent">
-              {user}@<wbr />
-              {host}
+          <h2 className="display text-[clamp(2.6rem,11vw,8rem)] text-bone">
+            Let&apos;s Talk<span className="text-accent">.</span>
+          </h2>
+        </Reveal>
+
+        <Reveal delay={0.1} className="mt-12 border-t border-line pt-8">
+          <a
+            href={`mailto:${links.email}`}
+            className="group inline-flex max-w-full items-center gap-3 sm:gap-5"
+          >
+            <span className="truncate text-[clamp(1.05rem,3.6vw,2.1rem)] font-light tracking-tight text-bone transition-colors duration-300 group-hover:text-accent">
+              {links.email}
             </span>
             <ArrowUpRight
-              strokeWidth={1.2}
-              aria-hidden="true"
-              className="ml-2 inline h-[0.5em] w-[0.5em] shrink-0 -translate-y-[0.28em] text-[clamp(1.55rem,4.9vw,4.4rem)] text-accent transition-transform duration-500 ease-smooth group-hover:-translate-y-[0.5em] group-hover:translate-x-1"
+              size={26}
+              strokeWidth={1.4}
+              className="shrink-0 text-accent transition-transform duration-500 ease-smooth group-hover:-translate-y-1 group-hover:translate-x-1"
             />
           </a>
         </Reveal>
 
-        <Reveal delay={0.08} className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2">
-          <span className="text-[15px] text-accent sm:text-base">{profile.status}</span>
-          <Divider />
-          <span className="text-[15px] text-muted sm:text-base">{profile.location}</span>
-        </Reveal>
-
-        <Reveal delay={0.12} className="mt-14 border-t border-line pt-10">
+        <Reveal delay={0.14}>
           <MailNote />
         </Reveal>
 
-        <Reveal delay={0.08} className="mt-16 border-t border-line pt-8">
-          <ul className="flex flex-wrap gap-x-10 gap-y-4">
-            {channels.map((c) => (
-              <li key={c.label} className="flex items-baseline gap-2.5">
-                <a
-                  href={c.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="link-quiet text-[17px] sm:text-lg"
-                >
-                  {c.label}
-                </a>
-                <span className="meta text-faint">{c.hint}</span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+        <div className="mt-12 grid gap-px border border-line bg-line sm:grid-cols-3">
+          {channels.map((c, i) => (
+            <motion.a
+              key={c.label}
+              href={c.href}
+              target="_blank"
+              rel="noreferrer noopener"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-10% 0px' }}
+              transition={{ duration: 0.6, ease: EASE, delay: i * 0.07 }}
+              className="group relative flex items-center justify-between gap-4 bg-ink p-6 transition-colors duration-300 hover:bg-panel sm:p-7"
+            >
+              <span>
+                <span className="flex items-center gap-2.5">
+                  <c.icon size={15} strokeWidth={1.6} className="text-muted transition-colors group-hover:text-accent" />
+                  <span className="text-base tracking-tight text-bone">{c.label}</span>
+                </span>
+                <span className="mt-1.5 block font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+                  {c.hint}
+                </span>
+              </span>
+              <ArrowUpRight
+                size={17}
+                strokeWidth={1.5}
+                className="shrink-0 text-faint transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
+              />
+            </motion.a>
+          ))}
+        </div>
 
-        <footer className="mt-20 border-t border-line pt-7">
-          <p className="meta text-faint">
-            © {new Date().getFullYear()} {profile.first} {profile.last}
-            <span className="px-2" aria-hidden="true">
-              ·
-            </span>
-            {profile.location}
+        <footer className="mt-16 flex flex-col gap-4 border-t border-line pt-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            © {new Date().getFullYear()} {profile.first} {profile.last} · {profile.location}
+          </p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            React · Vite · Tailwind · Framer Motion
           </p>
         </footer>
       </div>

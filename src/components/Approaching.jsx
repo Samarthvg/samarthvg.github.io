@@ -46,7 +46,7 @@ export default function Approaching() {
   return (
     <div className="w-full max-w-[250px]">
       <div className="relative ml-[12%] w-fit max-w-[88%] border border-line bg-ink px-3 py-2">
-        <p className="text-[13px] leading-relaxed text-bone/85">
+        <p className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em] text-muted">
           Oh? You&apos;re approaching me?
         </p>
         <span

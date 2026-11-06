@@ -1,116 +1,216 @@
-﻿import { motion } from 'framer-motion'
-import { ArrowUpRight, ExternalLink, Github } from 'lucide-react'
+﻿import { useCallback, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowLeft, ArrowRight, Github, ExternalLink } from 'lucide-react'
 import { projects } from '../data/portfolio'
-import { EASE, LinkChip, Reveal, SectionHeading, StackList } from './ui'
+import { useElementWidth, useIsDesktop } from '../lib/hooks'
+import { LinkChip, Reveal, SectionHead, StackList } from './ui'
 import ProjectVisual from './ProjectVisual'
+import ProjectDetail from './ProjectDetail'
 
-const LEAD = projects.filter((p) => p.featured)
-const REST = projects.filter((p) => !p.featured)
+const N = projects.length
+const SPRING = { type: 'spring', stiffness: 210, damping: 30, mass: 0.9 }
 
 export default function Projects() {
+  const [active, setActive] = useState(0)
+  const [open, setOpen] = useState(null)
+  const activeRef = useRef(0)
+  const viewportRef = useRef(null)
+  const [wrapRef, w] = useElementWidth()
+  const isDesktop = useIsDesktop()
+
+  const go = useCallback((i) => {
+    const next = Math.max(0, Math.min(N - 1, i))
+    activeRef.current = next
+    setActive(next)
+  }, [])
+
+  // wheel: horizontal always, vertical only while hovering and not at an end
+  useEffect(() => {
+    const el = viewportRef.current
+    if (!el) return
+    let acc = 0
+    let lock = false
+    const onWheel = (e) => {
+      if (open) return
+      const horiz = Math.abs(e.deltaX) > Math.abs(e.deltaY) * 1.2
+      const d = horiz ? e.deltaX : e.deltaY
+      const i = activeRef.current
+      if (!horiz && ((d > 0 && i >= N - 1) || (d < 0 && i <= 0))) return // let the page scroll
+      e.preventDefault()
+      if (lock) return
+      acc += d
+      if (Math.abs(acc) > 48) {
+        go(i + Math.sign(acc))
+        acc = 0
+        lock = true
+        setTimeout(() => (lock = false), 340)
+      }
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [go, open])
+
+  const onKeyDown = (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(active + 1) }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(active - 1) }
+    if (e.key === 'Home') { e.preventDefault(); go(0) }
+    if (e.key === 'End') { e.preventDefault(); go(N - 1) }
+  }
+
+  const cardW = isDesktop ? Math.min(660, Math.max(430, w * 0.5)) : Math.max(240, Math.min(400, w * 0.84))
+  const spacing = cardW + (isDesktop ? 44 : 16)
+
   return (
-    <section id="projects" className="relative py-24 sm:py-28 lg:py-32">
-      <div className="shell">
-        <SectionHeading
-          title="Projects"
-          meta={`${LEAD.length} in full · ${REST.length} more`}
-        />
+    <section id="projects" className="relative py-24 sm:py-32 lg:py-40">
+      <div className="shell" ref={wrapRef}>
+        <SectionHead index="03" title="Projects" note="Drag · scroll · arrows" />
+      </div>
 
-        {/* Each lead project gets a full row and its own screenshot rather
-            than a slot in a carousel. The work is the content; a card deck
-            made every project the same size and showed one at a time. */}
-        <div className="mt-16 sm:mt-20">
-          {LEAD.map((p, i) => (
-            <LeadProject key={p.id} project={p} flip={i % 2 === 1} first={i === 0} />
-          ))}
-        </div>
+      {/* full-bleed stage */}
+      <div
+        ref={viewportRef}
+        role="group"
+        aria-roledescription="carousel"
+        aria-label="Selected projects"
+        tabIndex={0}
+        onKeyDown={onKeyDown}
+        className="relative w-full overflow-hidden outline-none"
+      >
+        <motion.div
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.12}
+          onDragEnd={(_, info) => {
+            if (info.offset.x < -60 || info.velocity.x < -450) go(activeRef.current + 1)
+            else if (info.offset.x > 60 || info.velocity.x > 450) go(activeRef.current - 1)
+          }}
+          className="relative h-[520px] cursor-grab active:cursor-grabbing sm:h-[560px]"
+        >
+          {projects.map((p, i) => {
+            const off = i - active
+            const on = off === 0
+            const abs = Math.abs(off)
+            return (
+              <motion.div
+                key={p.id}
+                className="absolute left-1/2 top-0"
+                style={{ width: cardW, zIndex: 20 - abs }}
+                animate={{
+                  x: off * spacing - cardW / 2,
+                  scale: on ? 1 : 0.85,
+                  opacity: abs === 0 ? 1 : abs === 1 ? 0.42 : 0.16,
+                }}
+                transition={SPRING}
+              >
+                <ProjectCard
+                  project={p}
+                  active={on}
+                  onSelect={() => (on ? setOpen(p) : go(i))}
+                />
+              </motion.div>
+            )
+          })}
+        </motion.div>
+      </div>
 
-        <Reveal className="mt-20 sm:mt-24">
-          <h3 className="display text-[1.6rem] text-bone sm:text-[1.9rem]">Also built</h3>
-          <ul className="mt-8 border-t border-line">
-            {REST.map((p) => (
-              <li key={p.id}>
-                <div className="group grid items-baseline gap-x-8 gap-y-1.5 border-b border-line py-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] sm:py-6">
-                  <div className="flex flex-wrap items-baseline gap-x-3">
-                    <h4 className="text-[17px] text-bone sm:text-lg">{p.name}</h4>
-                    {(p.github || p.demo) && (
-                      <a
-                        href={p.demo || p.github}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        aria-label={`${p.name}, open ${p.demo ? 'demo' : 'source'}`}
-                        className="text-faint transition-colors duration-300 hover:text-accent"
-                      >
-                        <ArrowUpRight size={15} strokeWidth={1.7} />
-                      </a>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-2 sm:items-end">
-                    <p className="text-sm text-muted">{p.kicker}</p>
-                    <StackList items={p.stack.slice(0, 4)} className="sm:justify-end" />
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+      {/* controls */}
+      <div className="shell mt-10">
+        <Reveal className="flex items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-xs text-bone">{projects[active].index}</span>
+            <span className="relative h-px w-28 bg-line sm:w-44">
+              <motion.span
+                className="absolute inset-y-0 bg-accent"
+                animate={{ left: `${(active / N) * 100}%`, width: `${100 / N}%` }}
+                transition={SPRING}
+              />
+            </span>
+            <span className="font-mono text-xs text-faint">{String(N).padStart(2, '0')}</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => go(active - 1)}
+              disabled={active === 0}
+              aria-label="Previous project"
+              className="icon-btn h-10 w-10 disabled:pointer-events-none disabled:opacity-30"
+            >
+              <ArrowLeft size={16} strokeWidth={1.6} />
+            </button>
+            <button
+              onClick={() => go(active + 1)}
+              disabled={active === N - 1}
+              aria-label="Next project"
+              className="icon-btn h-10 w-10 disabled:pointer-events-none disabled:opacity-30"
+            >
+              <ArrowRight size={16} strokeWidth={1.6} />
+            </button>
+          </div>
         </Reveal>
       </div>
+
+      <AnimatePresence>
+        {open && <ProjectDetail project={open} onClose={() => setOpen(null)} />}
+      </AnimatePresence>
     </section>
   )
 }
 
-function LeadProject({ project: p, flip, first }) {
+function ProjectCard({ project: p, active, onSelect }) {
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-12% 0px -8% 0px' }}
-      transition={{ duration: 0.8, ease: EASE }}
-      className={`grid gap-8 lg:grid-cols-12 lg:gap-14 ${
-        first ? '' : 'mt-20 border-t border-line pt-20 sm:mt-24 sm:pt-24'
+      layoutId={`card-${p.id}`}
+      onClick={onSelect}
+      role="button"
+      tabIndex={active ? 0 : -1}
+      aria-label={`${p.name}, open details`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect() }
+      }}
+      transition={{ type: 'spring', stiffness: 300, damping: 34 }}
+      className={`group flex h-[520px] select-none flex-col border bg-panel sm:h-[560px] ${
+        active ? 'border-line2' : 'border-line'
       }`}
     >
-      {/* The shot holds while its write-up scrolls past. Without this the
-          image column simply ran out and left a third of the row empty. */}
-      <div
-        className={`self-start lg:col-span-7 lg:sticky lg:top-24 ${flip ? 'lg:order-2' : ''}`}
-      >
-        <div className="overflow-hidden border border-line bg-panel">
-          {/* 2:1, which is what every screenshot in public/shots is authored
-              at, so cover crops nothing. */}
-          <ProjectVisual kind={p.visual} shot={p.shot} className="aspect-[2/1] w-full" />
+      <div className="flex items-center justify-between border-b border-line px-5 py-3 sm:px-7">
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[10px] text-accent">{p.index}</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">{p.kicker}</span>
         </div>
+        <span
+          className={`font-mono text-[10px] uppercase tracking-[0.18em] transition-opacity duration-300 ${
+            active ? 'text-faint opacity-100 group-hover:text-accent' : 'opacity-0'
+          }`}
+        >
+          Open
+        </span>
       </div>
 
-      {/* The cap only bites below lg, where this column goes full width and
-          the copy would otherwise run to ninety characters a line. */}
-      <div className={`max-w-[58ch] lg:col-span-5 lg:max-w-none ${flip ? 'lg:order-1' : ''}`}>
-        <p className="text-sm text-accent">{p.kicker}</p>
-        <h3 className="display mt-3 text-[clamp(2rem,4.2vw,2.9rem)] text-bone">{p.name}</h3>
-        <p className="mt-4 font-serif text-lg italic leading-snug text-bone/85 sm:text-xl">
-          {p.tagline}
-        </p>
-        <p className="mt-6 max-w-[48ch] text-[15px] leading-[1.7] text-muted">{p.description}</p>
+      <ProjectVisual kind={p.visual} shot={p.shot} className="h-[190px] shrink-0 sm:h-[220px]" />
 
-        <ul className="mt-7 space-y-2.5">
-          {p.highlights.slice(0, 3).map((h) => (
-            <li
-              key={h}
-              className="relative pl-5 text-[14px] leading-[1.6] text-bone/75 before:absolute before:left-0 before:top-[0.62em] before:h-px before:w-2.5 before:bg-accent/55"
+      <div className="flex flex-1 flex-col justify-between px-5 pb-6 pt-6 sm:px-7 sm:pb-7">
+        <div>
+          <h3 className="display text-[clamp(1.7rem,3.4vw,2.6rem)] text-bone">{p.name}</h3>
+          <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-muted sm:text-[15px]">{p.tagline}</p>
+        </div>
+
+        <div>
+          <StackList items={p.stack} className="mb-5" />
+          <div className="flex flex-wrap items-center gap-2">
+            {p.github && (
+              <LinkChip href={p.github} icon={Github} label="Code" />
+            )}
+            {p.demo && <LinkChip href={p.demo} icon={ExternalLink} label="Demo" />}
+            <span className="ml-auto h-px flex-1 bg-line" aria-hidden="true" />
+            <span
+              className={`font-mono text-[10px] uppercase tracking-[0.18em] text-accent transition-opacity duration-300 ${
+                active ? 'opacity-100' : 'opacity-0'
+              }`}
             >
-              {h}
-            </li>
-          ))}
-        </ul>
-
-        <StackList items={p.stack} className="mt-7 border-t border-line pt-5" />
-
-        {(p.github || p.demo) && (
-          <div className="mt-5 flex flex-wrap items-center gap-x-7 gap-y-3">
-            {p.github && <LinkChip href={p.github} icon={Github} label="Source" />}
-            {p.demo && <LinkChip href={p.demo} icon={ExternalLink} label="Live demo" />}
+              Details →
+            </span>
           </div>
-        )}
+        </div>
       </div>
     </motion.article>
   )

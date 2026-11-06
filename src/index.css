@@ -6,13 +6,16 @@
    Palette
 
    Five seasons, each a complete palette rather than one accent
-   dropped on a shared grey. The ground, the ink and the two
-   pigments all carry the season's hue, so a theme flip moves the
-   whole page instead of recolouring a few hairlines.
+   dropped on a shared grey ground. The ground, the ink and the
+   two pigments all carry the season's hue, so a theme flip moves
+   the whole page instead of recolouring a few hairlines.
 
    Selected by [data-theme][data-accent] on <html>. The pre-paint
-   script in index.html sets those two attributes and nothing else,
-   which is why there are no colour values duplicated in JS.
+   script in index.html sets those two attributes and nothing
+   else, which is why no colour value is duplicated in JS.
+
+   Every text colour here measures at least 4.5:1 against its own
+   ground, in all ten combinations.
    ───────────────────────────────────────────────────────────── */
 
 @layer base {
@@ -25,7 +28,7 @@
   [data-theme='light'] {
     --c-line: rgb(var(--c-bone) / 0.15);
     --c-line2: rgb(var(--c-bone) / 0.3);
-    --c-grain: 0.02;
+    --c-grain: 0.022;
   }
 
   /* ── dark seasons ───────────────────────────────────────── */
@@ -176,108 +179,48 @@
     @apply bg-ink text-bone font-sans antialiased;
     overflow-x: clip;
     font-feature-settings: 'cv11' 1, 'ss03' 1;
-    transition: background-color 0.5s ease, color 0.5s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   section {
-    scroll-margin-top: 88px;
+    scroll-margin-top: 96px;
   }
-
-  /* ── browser surfaces ─────────────────────────────────────
-     The parts nobody draws. Left at their defaults they belong to
-     no palette, and on a page this quiet they are conspicuous. */
 
   ::selection {
-    background: rgb(var(--c-accent) / 0.3);
-    color: rgb(var(--c-bone));
-  }
-
-  input,
-  textarea {
-    caret-color: rgb(var(--c-accent));
+    background: rgb(var(--c-accent));
+    color: rgb(var(--c-ink));
   }
 
   :focus-visible {
     outline: 2px solid rgb(var(--c-accent));
-    outline-offset: 3px;
-    border-radius: 1px;
+    outline-offset: 4px;
+    border-radius: 2px;
   }
 
-  a {
-    text-underline-offset: 0.22em;
-    text-decoration-thickness: from-font;
-  }
-
-  /* Firefox */
-  html {
-    scrollbar-color: rgb(var(--c-faint) / 0.55) rgb(var(--c-ink));
-    scrollbar-width: thin;
-  }
-  /* WebKit */
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
   }
   ::-webkit-scrollbar-track {
     background: rgb(var(--c-ink));
   }
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--c-faint) / 0.45);
-    border: 3px solid rgb(var(--c-ink));
+    background: rgb(var(--c-faint) / 0.5);
     border-radius: 99px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--c-accent) / 0.65);
   }
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Type
-
-   Three faces, three jobs, no overlap:
-     Fraunces  — every voice that speaks. Headings, display, pull
-                 quotes, emphasis.
-     Inter     — body copy and interface.
-     JetBrains — measurement only: dates, counts, versions, stacks.
-                 Never a label, never a heading, never decoration.
-   ───────────────────────────────────────────────────────────── */
-
 @layer components {
   .shell {
-    @apply mx-auto w-full max-w-[1240px] px-6 sm:px-9 lg:px-14;
+    @apply mx-auto w-full max-w-[1240px] px-6 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[10px] uppercase tracking-[0.24em] text-muted sm:text-[11px];
   }
 
   .display {
-    @apply font-serif font-normal;
-    font-optical-sizing: auto;
-    font-variation-settings: 'SOFT' 0, 'WONK' 0;
-    letter-spacing: -0.022em;
-    line-height: 0.94;
-  }
-
-  /* Section headings. Large enough to rank the page on their own,
-     so there is nothing above them to announce what they are. */
-  .heading {
-    @apply display text-bone;
-    font-size: clamp(2.3rem, 5.2vw, 3.9rem);
-  }
-
-  /* Opening paragraph voice: Inter, large, loose. */
-  .lede {
-    @apply text-balance text-lg leading-[1.6] text-muted sm:text-xl;
-  }
-
-  /* The only sanctioned mono. Numbers and names of things, aligned. */
-  .meta {
-    @apply font-mono text-[11px] tracking-[0.02em] text-muted;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* A field label in a two-column record. Small caps rather than the
-     usual wide-tracked uppercase mono, so it sits under the data
-     instead of competing with it. */
-  .field {
-    @apply font-sans text-[11px] font-medium uppercase tracking-[0.1em] text-faint;
+    @apply font-sans font-semibold uppercase leading-[0.88] tracking-tightest;
   }
 
   .icon-btn {
@@ -287,28 +230,12 @@
   .sr-only-focusable:not(:focus) {
     @apply sr-only;
   }
-
-  /* Underline that grows from the text rather than appearing under it. */
-  .link-quiet {
-    @apply relative text-bone transition-colors duration-300 hover:text-accent;
-    background-image: linear-gradient(rgb(var(--c-accent)), rgb(var(--c-accent)));
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    background-size: 0 1px;
-    transition: background-size 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
-  }
-  .link-quiet:hover {
-    background-size: 100% 1px;
-  }
 }
 
 @layer utilities {
   .grain {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
     opacity: var(--c-grain);
-  }
-  .rule {
-    @apply h-px w-full bg-line;
   }
   .dotgrid {
     background-image: radial-gradient(rgb(var(--c-bone) / 0.16) 1px, transparent 1px);
@@ -389,12 +316,13 @@
 }
 
 /* ── project screenshots ─────────────────────────── */
-/* Barely a grade at all. Every screenshot is already built for the theme it
-   is served in, so the brightness match is baked into the file rather than
-   corrected here. All that is left is a touch of warmth to seat them in the
-   palette, and a little extra saturation so the work keeps its own colour. */
+/* Barely a grade at all. These sit in a card at full strength rather than
+   under type, and every screenshot is already built for the theme it is served
+   in, so the brightness match is baked into the file rather than corrected
+   here. All that is left is a touch of warmth to seat them in the palette,
+   and a little extra saturation so the work keeps its own colour. */
 .shot {
-  filter: sepia(0.08) saturate(1.14) contrast(1.02);
+  filter: sepia(0.1) saturate(1.12) contrast(1.02);
 }
 
 /* ── scene backdrops ─────────────────────────────── */
@@ -411,8 +339,14 @@
   filter: grayscale(0.6) sepia(0.38) saturate(0.85) contrast(1.2) brightness(0.9);
 }
 
+/* Both themes run at the same strength. The light theme was originally held
+   back because dark text on paper has less contrast to give away, but that
+   left the scene looking washed out; lifting the copy over it to bone/90
+   instead buys the headroom, and measures above 4.5:1 at these values.
+   The moving clip is fainter than the still because motion draws the eye on
+   its own. */
 .scene--motion {
-  opacity: 0.26;
+  opacity: 0.24;
 }
 .scene--still {
   opacity: 0.3;
@@ -517,6 +451,7 @@ html.has-custom-cursor * {
   opacity: 0;
   will-change: transform;
   transition: opacity 0.25s ease;
+  /* enough separation to stay readable over the hero photograph */
   filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.4));
 }
 .brooch-cursor span {
