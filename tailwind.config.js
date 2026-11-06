@@ -20,7 +20,7 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
         mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
-        serif: ['Instrument Serif', 'Georgia', 'serif'],
+        serif: ['Fraunces', 'Iowan Old Style', 'Georgia', 'serif'],
       },
       letterSpacing: { tightest: '-0.045em' },
       transitionTimingFunction: { smooth: 'cubic-bezier(0.16, 1, 0.3, 1)' },

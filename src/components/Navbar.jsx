@@ -55,11 +55,13 @@ export default function Navbar() {
           <div className="shell flex h-16 items-center justify-between sm:h-[72px]">
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="group flex items-center gap-2.5"
+              className="group flex items-baseline gap-1.5"
               aria-label="Back to top"
             >
-              <span className="font-mono text-sm font-medium tracking-[0.14em] text-bone">SG</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              <span className="font-serif text-xl leading-none text-bone transition-colors duration-300 group-hover:text-accent">
+                SG
+              </span>
+              <span className="h-1 w-1 rounded-full bg-accent" />
             </button>
 
             <nav aria-label="Sections" className="hidden md:block">
@@ -71,7 +73,7 @@ export default function Navbar() {
                       <button
                         onClick={() => go(item.id)}
                         aria-current={on ? 'true' : undefined}
-                        className={`relative px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors duration-300 ${
+                        className={`relative px-3.5 py-2 text-sm transition-colors duration-300 ${
                           on ? 'text-bone' : 'text-muted hover:text-bone'
                         }`}
                       >
@@ -79,7 +81,7 @@ export default function Navbar() {
                         {on && (
                           <motion.span
                             layoutId="nav-active"
-                            className="absolute inset-x-2 -bottom-px h-px bg-accent"
+                            className="absolute inset-x-3.5 -bottom-px h-px bg-accent"
                             transition={{ type: 'spring', stiffness: 380, damping: 34 }}
                           />
                         )}
@@ -90,10 +92,8 @@ export default function Navbar() {
               </ul>
             </nav>
 
-            <div className="flex items-center gap-2">
-              <span className="hidden font-mono text-[10px] uppercase tracking-[0.2em] text-faint lg:block">
-                {accent}
-              </span>
+            <div className="flex items-center gap-3">
+              <span className="hidden text-[13px] capitalize text-faint lg:block">{accent}</span>
               <button
                 onClick={toggleTheme}
                 className="icon-btn h-10 w-10"
@@ -139,12 +139,9 @@ export default function Navbar() {
                   transition={{ delay: 0.06 * i + 0.05, duration: 0.5, ease: EASE }}
                   className="flex items-baseline gap-4 border-b border-line py-5 text-left"
                 >
-                  <span className="font-mono text-[10px] text-accent">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
                   <span
-                    className={`display text-3xl ${
-                      active === item.id ? 'text-bone' : 'text-muted'
+                    className={`display text-[2.1rem] transition-colors duration-300 ${
+                      active === item.id ? 'text-accent' : 'text-bone'
                     }`}
                   >
                     {item.label}

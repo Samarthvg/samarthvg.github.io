@@ -1,76 +1,65 @@
-import { useState } from 'react'
-import { skills } from '../data/portfolio'
-import { Reveal, SectionHead } from './ui'
+import { experience, projects, skills } from '../data/portfolio'
+import { Reveal, SectionHeading } from './ui'
 
-// Round-robin across the clusters so a highlighted group scatters
-// through the field instead of lighting up one contiguous block.
-const FIELD = (() => {
-  const out = []
-  const longest = Math.max(...skills.map((g) => g.items.length))
-  for (let i = 0; i < longest; i++)
-    for (const g of skills) if (g.items[i]) out.push({ item: g.items[i], group: g.id })
-  return out
+/**
+ * Rank by evidence rather than by assertion.
+ *
+ * Every role and project on this page declares the stack it was built with.
+ * Counting a tool across those is a claim the page can back up, which is worth
+ * more than a self-rated bar chart and more than a flat wall of keywords.
+ * A tool used in several pieces of work is set in the page's ink; one that
+ * appears nowhere above is still listed, just not promoted.
+ */
+const norm = (s) => s.toLowerCase().replace(/\.js$/, '').replace(/[\s.-]/g, '')
+
+const USE = (() => {
+  const tally = new Map()
+  const add = (t) => tally.set(norm(t), (tally.get(norm(t)) || 0) + 1)
+  for (const x of experience) x.stack.forEach(add)
+  for (const p of projects) p.stack.forEach(add)
+  return tally
 })()
 
+const GROUPS = skills.map((g) => ({
+  ...g,
+  items: g.items
+    .map((item) => ({ item, n: USE.get(norm(item)) || 0 }))
+    .sort((a, b) => b.n - a.n || a.item.localeCompare(b.item)),
+}))
+
 export default function Skills() {
-  const [active, setActive] = useState(null)
-
   return (
-    <section id="skills" className="relative py-24 sm:py-32 lg:py-40">
+    <section id="skills" className="relative py-24 sm:py-28 lg:py-32">
       <div className="shell">
-        <SectionHead index="04" title="Skills" note="Hover a cluster" />
+        <SectionHeading
+          title="Tools"
+          sub="Ordered by what the work above can vouch for. The figure beside a tool is the number of roles and projects on this page built with it."
+        />
 
-        <div onMouseLeave={() => setActive(null)}>
-          <Reveal className="flex flex-wrap items-baseline gap-x-7 gap-y-3 border-b border-line pb-6">
-            {skills.map((g, i) => {
-              const on = active === g.id
-              return (
-                <button
-                  key={g.id}
-                  onMouseEnter={() => setActive(g.id)}
-                  onFocus={() => setActive(g.id)}
-                  onClick={() => setActive((a) => (a === g.id ? null : g.id))}
-                  aria-pressed={on}
-                  className="group flex items-baseline gap-2 transition-colors duration-500"
-                >
-                  <span
-                    className={`font-mono text-[10px] transition-colors duration-500 ${
-                      on ? 'text-accent' : 'text-faint'
-                    }`}
-                  >
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <span
-                    className={`font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-500 ${
-                      on ? 'text-accent' : 'text-muted group-hover:text-bone'
-                    }`}
-                  >
-                    {g.label}
-                  </span>
-                </button>
-              )
-            })}
-          </Reveal>
-
-          <Reveal delay={0.06}>
-            <ul className="mt-10 flex flex-wrap items-baseline gap-x-6 gap-y-3 sm:mt-12 sm:gap-x-9 sm:gap-y-4">
-              {FIELD.map(({ item, group }) => {
-                const dimmed = active && active !== group
-                const lit = active === group
-                return (
+        <div className="mt-14 grid gap-x-12 gap-y-10 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-16">
+          {GROUPS.map((g, gi) => (
+            <Reveal key={g.id} delay={gi * 0.04}>
+              <h3 className="field border-b border-line pb-3">{g.label}</h3>
+              <ul className="mt-4">
+                {g.items.map(({ item, n }) => (
                   <li
                     key={item}
-                    onMouseEnter={() => setActive(group)}
-                    className={`cursor-default text-[clamp(1.05rem,2.6vw,1.8rem)] font-light tracking-tight transition-all duration-500 ease-smooth ${
-                      lit ? 'text-accent' : dimmed ? 'text-faint opacity-35' : 'text-bone/85'
-                    }`}
+                    className="flex items-baseline gap-2 py-[7px] text-[17px] leading-snug"
                   >
-                    {item}
+                    <span className={n > 0 ? 'text-bone' : 'text-muted'}>{item}</span>
+                    {n > 0 && (
+                      <span
+                        className="meta text-accent"
+                        aria-label={`used in ${n} ${n === 1 ? 'piece' : 'pieces'} of work on this page`}
+                      >
+                        {n}
+                      </span>
+                    )}
                   </li>
-                )
-              })}
-            </ul>
-          </Reveal>
+                ))}
+              </ul>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 
-const BG = { dark: '#171512', light: '#EBE5D9' }
-
-// Soft earthy / sky tones. Each theme flip advances to the next one.
-// NOTE: mirrored in the pre-paint script in index.html — keep both in sync.
+// Five seasons. Each theme flip advances to the next one.
+//
+// Only the names and the browser-chrome colour live here; every pigment is
+// in src/index.css under [data-theme][data-accent]. Changing a colour means
+// touching one file, and there is no second copy to fall behind.
 export const ACCENTS = [
-  { name: 'sage', dark: '152 180 124', light: '96 122 72' },
-  { name: 'sky', dark: '140 172 194', light: '78 112 138' },
-  { name: 'wisteria', dark: '176 164 200', light: '106 94 140' },
-  { name: 'rose', dark: '208 156 158', light: '154 92 96' },
-  { name: 'gold', dark: '214 186 128', light: '140 106 44' },
+  { name: 'sage', dark: '#121511', light: '#E8E5D8' },
+  { name: 'slate', dark: '#101318', light: '#E2E7EB' },
+  { name: 'wisteria', dark: '#141219', light: '#E8E4EC' },
+  { name: 'ember', dark: '#181212', light: '#EEE4E0' },
+  { name: 'amber', dark: '#17130F', light: '#EFE8D9' },
 ]
 
 /**
@@ -37,14 +38,11 @@ export function useTheme() {
 
   useEffect(() => {
     const root = document.documentElement
-    const here = ACCENTS[index % ACCENTS.length]
-    const next = ACCENTS[(index + 1) % ACCENTS.length]
+    const season = ACCENTS[index % ACCENTS.length]
     root.dataset.theme = theme
     root.dataset.accent = String(index)
     root.style.colorScheme = theme
-    root.style.setProperty('--c-accent', here[theme])
-    root.style.setProperty('--c-accent2', next[theme])
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', BG[theme])
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', season[theme])
     try {
       localStorage.setItem('theme', theme)
       localStorage.setItem('accent', String(index))

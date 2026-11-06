@@ -109,7 +109,7 @@ export default function Staff() {
   const layers = ART[theme] || ART.dark
 
   return (
-    <figure className="mx-auto w-full max-w-[360px]">
+    <figure className="mx-auto w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[370px]">
       {/* the art keeps its own positioning context, so the caption below can
           grow without dragging the motes off the staff */}
       <div className="relative">
@@ -117,7 +117,7 @@ export default function Staff() {
           className="staff-halo pointer-events-none absolute h-44 w-44 -translate-x-1/2 rounded-full bg-accent/[0.13] blur-[80px]"
           style={{ left: `${mapX(50)}%`, top: `${mapY(30)}%` }}
         />
-        <AsciiArt layers={layers} maxWidth={360} className="relative" />
+        <AsciiArt layers={layers} maxWidth={400} className="relative" />
 
         <div aria-hidden="true" className="staff-motes pointer-events-none absolute inset-0">
           {MOTES.map((m) => (
@@ -143,12 +143,12 @@ export default function Staff() {
 
       {/* Attributed to Himmel alone. Naming the series would explain the joke;
           anyone who knows it will place the staff from the line. */}
-      <figcaption className="ml-auto mt-1 max-w-[30ch] text-right">
-        <p className="font-serif text-[13px] italic leading-snug text-muted sm:text-sm">
+      <figcaption className="pointer-events-auto ml-auto mt-4 max-w-[34ch] border-t border-line pt-4 text-right">
+        <p className="font-serif text-[15px] italic leading-[1.45] text-bone/80 sm:text-base">
           “It’s not a matter of what exists. What matters is doing what I can for the people
           standing right in front of me”
         </p>
-        <p className="eyebrow mt-2">Himmel</p>
+        <p className="meta mt-2.5 text-faint">Himmel</p>
       </figcaption>
     </figure>
   )
