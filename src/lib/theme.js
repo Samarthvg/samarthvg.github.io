@@ -5,12 +5,17 @@ import { useCallback, useEffect, useState } from 'react'
 // Only the names and the browser-chrome colour live here; every pigment is
 // in src/index.css under [data-theme][data-accent]. Changing a colour means
 // touching one file, and there is no second copy to fall behind.
+//
+// The dark grounds differ per season; the light one does not, because the
+// same tint that reads as a quality of darkness reads as a stained sheet on
+// paper. Light therefore moves its pigments only.
+const PAPER = '#E9E4D7'
 export const ACCENTS = [
-  { name: 'sage', dark: '#121511', light: '#E8E5D8' },
-  { name: 'slate', dark: '#101318', light: '#E2E7EB' },
-  { name: 'wisteria', dark: '#141219', light: '#E8E4EC' },
-  { name: 'ember', dark: '#181212', light: '#EEE4E0' },
-  { name: 'amber', dark: '#17130F', light: '#EFE8D9' },
+  { name: 'sage', dark: '#121511', light: PAPER },
+  { name: 'slate', dark: '#101318', light: PAPER },
+  { name: 'wisteria', dark: '#141219', light: PAPER },
+  { name: 'ember', dark: '#181212', light: PAPER },
+  { name: 'amber', dark: '#17130F', light: PAPER },
 ]
 
 /**

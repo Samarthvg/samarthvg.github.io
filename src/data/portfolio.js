@@ -100,6 +100,7 @@ export const experience = [
 export const projects = [
   {
     id: 'onward',
+    tags: ['Full stack', 'Shipped'],
     index: '01',
     name: 'Onward',
     kicker: 'Desktop app · Open source',
@@ -121,6 +122,7 @@ export const projects = [
   },
   {
     id: 'farmhouse',
+    tags: ['Full stack', 'Shipped'],
     index: '02',
     name: 'Farm Ledger',
     kicker: 'Cloudflare Workers · Hindi-first',
@@ -142,6 +144,7 @@ export const projects = [
   },
   {
     id: 'ai-thelete',
+    tags: ['Machine learning'],
     index: '03',
     name: 'AI-thelete',
     kicker: 'Retrieval-Augmented Generation',
@@ -161,6 +164,7 @@ export const projects = [
   },
   {
     id: 'cmapss',
+    tags: ['Machine learning', 'Research'],
     index: '04',
     name: 'Remaining Useful Life',
     kicker: 'NASA C-MAPSS · arXiv:2604.27234',
@@ -181,6 +185,7 @@ export const projects = [
   },
   {
     id: 'vision',
+    tags: ['Machine learning', 'Research'],
     index: '05',
     name: 'Deepfake Detection',
     kicker: 'Pattern Recognition & Computer Vision',
@@ -202,6 +207,7 @@ export const projects = [
   },
   {
     id: 'music',
+    tags: ['Machine learning', 'Research'],
     index: '06',
     name: 'Music Transcription',
     kicker: 'Source Separation · arXiv:2412.06703',
@@ -222,6 +228,7 @@ export const projects = [
   },
   {
     id: 'kanbas',
+    tags: ['Full stack'],
     index: '07',
     name: 'Kanbas LMS',
     kicker: 'MERN · Full Stack',
@@ -242,6 +249,7 @@ export const projects = [
   },
   {
     id: 'portfolio-sim',
+    tags: ['Full stack'],
     index: '08',
     name: 'Portfolio Simulator',
     kicker: 'Core Java · MVC',

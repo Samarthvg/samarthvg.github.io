@@ -94,61 +94,41 @@
     --c-accent2: 140 166 196;
   }
 
-  /* ── light seasons ──────────────────────────────────────── */
+  /* ── light ──────────────────────────────────────────────
+     One paper for all five. A tinted ground works on the dark
+     themes, where it reads as a different quality of darkness; on
+     a light ground the same move tints the whole sheet and the
+     page looks washed rather than coloured. So the paper and the
+     ink hold still here and only the two pigments move. */
+
+  [data-theme='light'] {
+    --c-ink: 233 228 215;
+    --c-panel: 225 220 205;
+    --c-raised: 216 211 194;
+    --c-bone: 46 43 37;
+    --c-muted: 85 80 71;
+    --c-faint: 96 90 80;
+  }
 
   [data-theme='light'],
   [data-theme='light'][data-accent='0'] {
-    --c-ink: 232 229 216;
-    --c-panel: 224 221 206;
-    --c-raised: 215 212 194;
-    --c-bone: 44 48 40;
-    --c-muted: 79 83 71;
-    --c-faint: 100 102 92;
     --c-accent: 70 97 48;
     --c-accent2: 138 97 32;
   }
-
   [data-theme='light'][data-accent='1'] {
-    --c-ink: 226 231 235;
-    --c-panel: 217 223 229;
-    --c-raised: 207 214 222;
-    --c-bone: 34 42 51;
-    --c-muted: 74 83 93;
-    --c-faint: 96 102 111;
     --c-accent: 40 90 124;
     --c-accent2: 155 83 44;
   }
-
   [data-theme='light'][data-accent='2'] {
-    --c-ink: 232 228 236;
-    --c-panel: 224 219 229;
-    --c-raised: 214 209 221;
-    --c-bone: 42 38 52;
-    --c-muted: 84 78 97;
-    --c-faint: 104 99 113;
     --c-accent: 88 72 132;
     --c-accent2: 76 110 62;
   }
-
   [data-theme='light'][data-accent='3'] {
-    --c-ink: 238 228 224;
-    --c-panel: 230 219 214;
-    --c-raised: 221 209 203;
-    --c-bone: 52 38 36;
-    --c-muted: 95 78 74;
-    --c-faint: 113 99 96;
     --c-accent: 147 65 69;
     --c-accent2: 26 108 102;
   }
-
   [data-theme='light'][data-accent='4'] {
-    --c-ink: 239 232 217;
-    --c-panel: 231 223 205;
-    --c-raised: 222 213 193;
-    --c-bone: 48 41 29;
-    --c-muted: 92 82 64;
-    --c-faint: 111 103 87;
-    --c-accent: 120 86 19;
+    --c-accent: 118 85 19;
     --c-accent2: 54 88 130;
   }
 
