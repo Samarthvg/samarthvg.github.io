@@ -101,18 +101,22 @@
      page looks washed rather than coloured. So the paper and the
      ink hold still here and only the two pigments move. */
 
+  /* The cream, the panels and the ink are the ones this site has always
+     had — a warm off-white, not a neutral one. muted and faint are that
+     same ink thinned until they clear 4.5:1 on the deepest of the three
+     surfaces, so the warmth carries all the way down the scale. */
   [data-theme='light'] {
-    --c-ink: 233 228 215;
-    --c-panel: 225 220 205;
-    --c-raised: 216 211 194;
-    --c-bone: 46 43 37;
-    --c-muted: 85 80 71;
-    --c-faint: 96 90 80;
+    --c-ink: 228 220 203;
+    --c-panel: 221 212 193;
+    --c-raised: 213 203 181;
+    --c-bone: 60 54 46;
+    --c-muted: 82 75 64;
+    --c-faint: 93 85 73;
   }
 
   [data-theme='light'],
   [data-theme='light'][data-accent='0'] {
-    --c-accent: 70 97 48;
+    --c-accent: 67 94 46;
     --c-accent2: 138 97 32;
   }
   [data-theme='light'][data-accent='1'] {
@@ -124,11 +128,11 @@
     --c-accent2: 76 110 62;
   }
   [data-theme='light'][data-accent='3'] {
-    --c-accent: 147 65 69;
+    --c-accent: 140 61 65;
     --c-accent2: 26 108 102;
   }
   [data-theme='light'][data-accent='4'] {
-    --c-accent: 118 85 19;
+    --c-accent: 112 80 17;
     --c-accent2: 54 88 130;
   }
 

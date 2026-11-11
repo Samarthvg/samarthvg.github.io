@@ -9,7 +9,7 @@ import { useCallback, useEffect, useState } from 'react'
 // The dark grounds differ per season; the light one does not, because the
 // same tint that reads as a quality of darkness reads as a stained sheet on
 // paper. Light therefore moves its pigments only.
-const PAPER = '#E9E4D7'
+const PAPER = '#E4DCCB'
 export const ACCENTS = [
   { name: 'sage', dark: '#121511', light: PAPER },
   { name: 'slate', dark: '#101318', light: PAPER },
