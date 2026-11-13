@@ -400,14 +400,14 @@ const MAP = {
  * project whose interface has no second skin at all passes a single path,
  * which is served in both, the veil in .shot-veil carrying it across.
  */
-export default function ProjectVisual({ kind, shot, fit = 'cover', className = '' }) {
+export default function ProjectVisual({ kind, shot, fit = 'cover', veil = true, className = '' }) {
   const theme = useThemeName()
   const src = typeof shot === 'string' ? shot : shot && shot[theme]
 
   if (src) {
     return (
       <div
-        className={`shot-frame relative overflow-hidden bg-raised ${className}`}
+        className={`relative overflow-hidden bg-raised ${veil ? 'shot-frame' : ''} ${className}`}
         aria-hidden="true"
       >
         <img
@@ -415,11 +415,11 @@ export default function ProjectVisual({ kind, shot, fit = 'cover', className = '
           alt=""
           loading="lazy"
           decoding="async"
-          className={`shot h-full w-full ${
+          className={`shot h-full w-full ${veil ? '' : 'shot-bare'} ${
             fit === 'contain' ? 'object-contain' : 'object-cover object-top'
           }`}
         />
-        <span className="shot-veil pointer-events-none absolute inset-0" />
+        {veil && <span className="shot-veil pointer-events-none absolute inset-0" />}
       </div>
     )
   }

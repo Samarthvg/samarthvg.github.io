@@ -104,7 +104,7 @@ function ProjectCard({ project: p, onSelect }) {
     <motion.article
       layoutId={`card-${p.id}`}
       transition={{ type: 'spring', stiffness: 300, damping: 34 }}
-      className="group relative flex w-full flex-col border border-line bg-panel transition-colors duration-300 hover:border-line2"
+      className="project-card group relative flex w-full flex-col border border-line bg-panel transition-colors duration-300 hover:border-line2"
     >
       <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-3">
         <div className="flex min-w-0 items-center gap-3">

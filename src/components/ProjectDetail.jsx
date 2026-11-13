@@ -67,10 +67,14 @@ export default function ProjectDetail({ project: p, onClose }) {
               and cover then showed only the middle half of the frame: on a
               stacked figure that is the seam between the two plots, blown up.
               contain keeps the whole frame when the cap bites. */}
+          {/* No veil in here. The wash on the grid is there to stop eight
+              interfaces shouting over each other while you scan; once one is
+              open, the screenshot is the thing you came to look at. */}
           <ProjectVisual
             kind={p.visual}
             shot={p.shot}
             fit="contain"
+            veil={false}
             className="aspect-[2/1] max-h-[min(42vh,400px)]"
           />
 
