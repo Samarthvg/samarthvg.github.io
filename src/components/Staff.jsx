@@ -116,7 +116,7 @@ export default function Staff() {
           grow without dragging the motes off the staff */}
       <div className="relative">
         <div
-          className="staff-halo pointer-events-none absolute h-44 w-44 -translate-x-1/2 rounded-full blur-[80px]"
+          className="staff-halo pointer-events-none absolute -translate-x-1/2 rounded-full"
           style={{ left: `${mapX(50)}%`, top: `${mapY(30)}%` }}
         />
         <AsciiArt layers={layers} maxWidth={360} className="relative" />

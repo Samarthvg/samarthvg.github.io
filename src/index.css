@@ -333,18 +333,32 @@
   }
 }
 
-/* The stone's bloom. On the dark ground this is light being added to
-   darkness and a little goes a long way; on paper there is no light left to
-   add, so the same value is a stain nobody sees and it has to be laid on
-   roughly twice as thick to register as a wash at all. */
+/* The stone's bloom, which is a different effect on each ground.
+   On the dark page it is the stone's own red lighting the air around it.
+   On paper it cannot be: anything tinted toward the gem is darker than
+   the sheet, so it lands as a stain rather than a glow. Light has to go
+   the other way there — a warm near-white that lifts the paper, the way
+   a bright thing on a page is drawn by leaving it brighter. */
 .staff-halo {
+  --halo-c: var(--c-gem);
   --halo-a: 0.16;
-  background: rgb(var(--c-gem) / var(--halo-a));
+  --halo-size: 11rem;
+  --halo-blur: 80px;
+  width: var(--halo-size);
+  height: var(--halo-size);
+  background: rgb(var(--halo-c) / var(--halo-a));
+  filter: blur(var(--halo-blur));
   animation: halo-breathe 7s ease-in-out infinite;
   will-change: transform, opacity;
 }
+/* Spread this far on a bright ground and nothing lands: a blur that wide
+   thins the disc until it moves the paper by a couple of levels. Light
+   therefore holds it tighter as well as brighter. */
 [data-theme='light'] .staff-halo {
-  --halo-a: 0.3;
+  --halo-c: 255 247 226;
+  --halo-a: 0.7;
+  --halo-size: 13rem;
+  --halo-blur: 52px;
 }
 @keyframes halo-breathe {
   0%,
