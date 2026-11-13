@@ -27,12 +27,17 @@ export default function Hero() {
       <div className="shell flex min-h-[calc(100svh-7rem)] flex-col justify-center pb-16">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.62fr)] lg:gap-12">
           <div className="order-2 lg:order-1">
-            <motion.div {...rise(0.05)} className="mb-7 flex items-center gap-3">
-              <span className="h-px w-8 bg-accent" />
-              <span className="eyebrow">
-                {profile.location} · {profile.status}
+            {/* No rule in front of this. A short accent dash before a
+                wide-tracked label is decoration standing in for hierarchy,
+                and the colour is better spent on the one fact a reader is
+                actually looking for. */}
+            <motion.p {...rise(0.05)} className="eyebrow mb-7">
+              {profile.location}
+              <span className="px-2 text-faint" aria-hidden="true">
+                ·
               </span>
-            </motion.div>
+              <span className="text-accent">{profile.status}</span>
+            </motion.p>
 
             <motion.h1
               {...rise(0.12)}
