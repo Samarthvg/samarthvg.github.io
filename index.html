@@ -3,27 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#171512" />
+    <meta name="theme-color" content="#141310" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
-      /* Pre-paint, to avoid a flash of the wrong season. It sets two
-         attributes and nothing else: every colour lives in src/index.css
-         under [data-theme][data-accent], so there is no palette here to
-         drift out of sync with the stylesheet. */
+      /* Pre-paint, to avoid a flash of the wrong theme. It sets one attribute
+         and nothing else: every colour lives in src/index.css under
+         [data-theme], so there is no palette here to drift out of sync with
+         the stylesheet. */
       (function () {
         var r = document.documentElement
         try {
           var t = localStorage.getItem('theme')
           if (t !== 'light' && t !== 'dark')
             t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
-          var i = parseInt(localStorage.getItem('accent'), 10)
-          if (!(i >= 0 && i < 5)) i = 0
           r.dataset.theme = t
-          r.dataset.accent = String(i)
           r.style.colorScheme = t
         } catch (e) {
           r.dataset.theme = 'dark'
-          r.dataset.accent = '0'
         }
       })()
     </script>

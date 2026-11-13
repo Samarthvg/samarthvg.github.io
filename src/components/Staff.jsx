@@ -3,8 +3,10 @@ import { useThemeName } from '../lib/theme'
 import AsciiArt from './AsciiArt'
 
 // Frieren's staff, colour-keyed out of a render. The two layers are
-// cell-aligned halves of one grid, gold in the page's ink and glass in the
-// accent, so the mark re-tints with the theme.
+// cell-aligned halves of one grid: the metal in the page's ink, so it
+// re-tints with the theme, and the stone and its ribbon in --c-gem, which
+// does not. Those are red in the object itself, and a staff whose stone
+// changes colour with the page is a swatch, not a staff.
 const W = Math.max(...METAL.map((r) => r.length), ...GEM.map((r) => r.length))
 const H = Math.max(METAL.length, GEM.length)
 
@@ -72,11 +74,11 @@ const extend = (rows) => {
 const ART = {
   dark: [
     { art: extend(METAL), tone: 'text-bone/85' },
-    { art: extend(GEM), tone: 'text-accent staff-gem' },
+    { art: extend(GEM), tone: 'text-gem staff-gem' },
   ],
   light: [
     { art: extend(METAL_LIGHT), tone: 'text-bone/85' },
-    { art: extend(GEM_LIGHT), tone: 'text-accent staff-gem' },
+    { art: extend(GEM_LIGHT), tone: 'text-gem staff-gem' },
   ],
 }
 
@@ -114,7 +116,7 @@ export default function Staff() {
           grow without dragging the motes off the staff */}
       <div className="relative">
         <div
-          className="staff-halo pointer-events-none absolute h-44 w-44 -translate-x-1/2 rounded-full bg-accent/[0.13] blur-[80px]"
+          className="staff-halo pointer-events-none absolute h-44 w-44 -translate-x-1/2 rounded-full bg-gem/[0.14] blur-[80px]"
           style={{ left: `${mapX(50)}%`, top: `${mapY(30)}%` }}
         />
         <AsciiArt layers={layers} maxWidth={360} className="relative" />

@@ -14,7 +14,7 @@ export default function Navbar() {
   const { scrollY } = useScroll()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const [theme, toggleTheme, accent] = useTheme()
+  const [theme, toggleTheme] = useTheme()
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 40))
   useScrollLock(open)
@@ -91,13 +91,9 @@ export default function Navbar() {
             </nav>
 
             <div className="flex items-center gap-2">
-              <span className="hidden font-mono text-[10px] uppercase tracking-[0.2em] text-faint lg:block">
-                {accent}
-              </span>
               <button
                 onClick={toggleTheme}
                 className="icon-btn h-10 w-10"
-                title={`Theme: ${theme} · ${accent}`}
                 aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
               >
                 {theme === 'dark' ? (

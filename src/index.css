@@ -5,106 +5,47 @@
 /* ─────────────────────────────────────────────────────────────
    Palette
 
-   Five seasons, each a complete palette rather than one accent
-   dropped on a shared grey ground. The ground, the ink and the
-   two pigments all carry the season's hue, so a theme flip moves
-   the whole page instead of recolouring a few hairlines.
+   Two palettes, one per theme, selected by [data-theme] on <html>.
+   The pre-paint script in index.html sets that attribute and nothing
+   else, so no colour value is duplicated in JS.
 
-   Selected by [data-theme][data-accent] on <html>. The pre-paint
-   script in index.html sets those two attributes and nothing
-   else, which is why no colour value is duplicated in JS.
+   The accent is a muted brass rather than anything vivid. Everything
+   on this page is warm — cream paper, a warm black, sepia-graded
+   scenes — so a cool accent would be the one cold thing on it and
+   would draw more attention, not less. The cool note lives in the
+   second pigment instead, which only ever shows in the petals and the
+   motes drifting off the staff.
 
-   Every text colour here measures at least 4.5:1 against its own
-   ground, in all ten combinations.
+   Line colours derive from the ink, so the hairlines follow the theme
+   without a second set of values.
+
+   Every text colour measures at least 4.5:1 against its own ground
+   and against the panel and raised surfaces it sits on; the second
+   pigment, which is decoration, clears the 3:1 graphics floor.
+
+   --c-gem is deliberately outside that scheme. The staff's stone and
+   its ribbon are red in the source render and stay red whatever the
+   accent is; they are a picture of a specific object, not a surface
+   the theme gets to recolour.
    ───────────────────────────────────────────────────────────── */
 
 @layer base {
-  :root {
+  :root,
+  [data-theme='dark'] {
+    --c-ink: 20 19 16;
+    --c-panel: 27 25 21;
+    --c-raised: 35 32 27;
+    --c-bone: 220 214 201;
+    --c-muted: 155 150 141;
+    --c-faint: 140 136 128;
+    --c-accent: 186 162 118;
+    --c-accent2: 130 148 170;
+    --c-gem: 193 94 82;
     --c-line: rgb(var(--c-bone) / 0.13);
     --c-line2: rgb(var(--c-bone) / 0.26);
     --c-grain: 0.03;
   }
 
-  [data-theme='light'] {
-    --c-line: rgb(var(--c-bone) / 0.15);
-    --c-line2: rgb(var(--c-bone) / 0.3);
-    --c-grain: 0.022;
-  }
-
-  /* ── dark seasons ───────────────────────────────────────── */
-
-  /* sage — mage green over forest black, gold as the second pigment */
-  [data-theme='dark'],
-  [data-theme='dark'][data-accent='0'] {
-    --c-ink: 18 21 17;
-    --c-panel: 24 28 22;
-    --c-raised: 32 37 29;
-    --c-bone: 219 214 200;
-    --c-muted: 155 152 135;
-    --c-faint: 129 128 113;
-    --c-accent: 158 190 126;
-    --c-accent2: 206 170 112;
-  }
-
-  /* slate — cold blue over blue black, copper second */
-  [data-theme='dark'][data-accent='1'] {
-    --c-ink: 16 19 24;
-    --c-panel: 21 26 32;
-    --c-raised: 29 35 42;
-    --c-bone: 211 216 224;
-    --c-muted: 142 151 162;
-    --c-faint: 117 127 140;
-    --c-accent: 134 178 206;
-    --c-accent2: 206 152 118;
-  }
-
-  /* wisteria — dusty violet, sage second */
-  [data-theme='dark'][data-accent='2'] {
-    --c-ink: 20 18 25;
-    --c-panel: 26 24 32;
-    --c-raised: 34 31 41;
-    --c-bone: 218 212 226;
-    --c-muted: 155 146 167;
-    --c-faint: 131 123 144;
-    --c-accent: 186 170 214;
-    --c-accent2: 152 182 140;
-  }
-
-  /* ember — dusty rose, deep teal second */
-  [data-theme='dark'][data-accent='3'] {
-    --c-ink: 24 18 18;
-    --c-panel: 31 24 23;
-    --c-raised: 40 30 29;
-    --c-bone: 226 212 210;
-    --c-muted: 167 146 143;
-    --c-faint: 143 122 121;
-    --c-accent: 224 158 158;
-    --c-accent2: 122 176 170;
-  }
-
-  /* amber — warm gold, slate blue second */
-  [data-theme='dark'][data-accent='4'] {
-    --c-ink: 23 19 15;
-    --c-panel: 30 25 19;
-    --c-raised: 39 32 25;
-    --c-bone: 226 216 198;
-    --c-muted: 162 150 126;
-    --c-faint: 137 125 105;
-    --c-accent: 226 190 122;
-    --c-accent2: 140 166 196;
-  }
-
-  /* ── light ──────────────────────────────────────────────
-     One paper for all five. A tinted ground works on the dark
-     themes, where it reads as a different quality of darkness; on
-     a light ground the same move tints the whole sheet and the
-     page looks washed rather than coloured. So the paper and the
-     ink hold still here and only the two pigments move. */
-
-  /* The cream, the panels and the ink are the ones this site has always
-     had — a warm off-white, not a neutral one. muted and faint are that
-     same ink thinned until they clear 4.5:1 on the deepest of the three
-     surfaces, so the warmth carries all the way down the scale. */
   [data-theme='light'] {
     --c-ink: 228 220 203;
     --c-panel: 221 212 193;
@@ -112,28 +53,12 @@
     --c-bone: 60 54 46;
     --c-muted: 82 75 64;
     --c-faint: 93 85 73;
-  }
-
-  [data-theme='light'],
-  [data-theme='light'][data-accent='0'] {
-    --c-accent: 67 94 46;
-    --c-accent2: 138 97 32;
-  }
-  [data-theme='light'][data-accent='1'] {
-    --c-accent: 40 90 124;
-    --c-accent2: 155 83 44;
-  }
-  [data-theme='light'][data-accent='2'] {
-    --c-accent: 88 72 132;
-    --c-accent2: 76 110 62;
-  }
-  [data-theme='light'][data-accent='3'] {
-    --c-accent: 140 61 65;
-    --c-accent2: 26 108 102;
-  }
-  [data-theme='light'][data-accent='4'] {
-    --c-accent: 112 80 17;
-    --c-accent2: 54 88 130;
+    --c-accent: 106 81 30;
+    --c-accent2: 66 87 110;
+    --c-gem: 150 54 44;
+    --c-line: rgb(var(--c-bone) / 0.15);
+    --c-line2: rgb(var(--c-bone) / 0.3);
+    --c-grain: 0.022;
   }
 
   * {

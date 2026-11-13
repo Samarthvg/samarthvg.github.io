@@ -1,22 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 
-// Five seasons. Each theme flip advances to the next one.
-//
-// Only the names and the browser-chrome colour live here; every pigment is
-// in src/index.css under [data-theme][data-accent]. Changing a colour means
-// touching one file, and there is no second copy to fall behind.
-//
-// The dark grounds differ per season; the light one does not, because the
-// same tint that reads as a quality of darkness reads as a stained sheet on
-// paper. Light therefore moves its pigments only.
-const PAPER = '#E4DCCB'
-export const ACCENTS = [
-  { name: 'sage', dark: '#121511', light: PAPER },
-  { name: 'slate', dark: '#101318', light: PAPER },
-  { name: 'wisteria', dark: '#141219', light: PAPER },
-  { name: 'ember', dark: '#181212', light: PAPER },
-  { name: 'amber', dark: '#17130F', light: PAPER },
-]
+// Only the browser-chrome colour lives here; every pigment is in
+// src/index.css under [data-theme]. Changing a colour means touching one
+// file, and there is no second copy to fall behind.
+const CHROME = { dark: '#141310', light: '#E4DCCB' }
 
 /**
  * Read-only view of the current theme, for components that need to render
@@ -39,27 +26,20 @@ export function useThemeName() {
 
 export function useTheme() {
   const [theme, setTheme] = useState(() => document.documentElement.dataset.theme || 'dark')
-  const [index, setIndex] = useState(() => Number(document.documentElement.dataset.accent) || 0)
 
   useEffect(() => {
     const root = document.documentElement
-    const season = ACCENTS[index % ACCENTS.length]
     root.dataset.theme = theme
-    root.dataset.accent = String(index)
     root.style.colorScheme = theme
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', season[theme])
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', CHROME[theme])
     try {
       localStorage.setItem('theme', theme)
-      localStorage.setItem('accent', String(index))
     } catch {
       /* private mode */
     }
-  }, [theme, index])
+  }, [theme])
 
-  const toggle = useCallback(() => {
-    setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
-    setIndex((i) => (i + 1) % ACCENTS.length)
-  }, [])
+  const toggle = useCallback(() => setTheme((t) => (t === 'dark' ? 'light' : 'dark')), [])
 
-  return [theme, toggle, ACCENTS[index % ACCENTS.length].name]
+  return [theme, toggle]
 }

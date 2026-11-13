@@ -14,6 +14,7 @@ export default {
         faint: c('--c-faint'),
         accent: c('--c-accent'),
         accent2: c('--c-accent2'),
+        gem: c('--c-gem'),
         line: 'var(--c-line)',
         line2: 'var(--c-line2)',
       },
