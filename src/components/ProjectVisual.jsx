@@ -291,7 +291,93 @@ function System() {
   )
 }
 
+/* ── 07 · chat ────────────────────────────────── */
+/* A conversation that shows its working: the answer carries two numbered
+   citations, and each one runs back to the document it came out of. The
+   whole claim of a RAG assistant in one picture. */
+const ASK = [
+  { x: 156, y: 22, w: 140, h: 30, lines: [[168, 100], [168, 62]] },
+  { x: 186, y: 160, w: 110, h: 28, lines: [[198, 74], [198, 48]] },
+]
+const REPLY_LINES = [
+  [40, 182],
+  [40, 198],
+  [40, 138],
+]
+const CITES = [
+  { x: 40, cite: '1', doc: 1 },
+  { x: 74, cite: '2', doc: 3 },
+]
+const SOURCES = Array.from({ length: 5 }, (_, i) => ({ y: 36 + i * 32 }))
+
+function Chat() {
+  return (
+    <>
+      {/* what the reply is grounded in */}
+      {SOURCES.map((d, i) => {
+        const hit = CITES.some((c) => c.doc === i)
+        return (
+          <rect
+            key={i}
+            x="352"
+            y={d.y}
+            width="104"
+            height="22"
+            fill={hit ? A : F}
+            fillOpacity={hit ? 0.18 : 0.05}
+            stroke={hit ? A : L}
+            strokeWidth="1"
+          />
+        )
+      })}
+
+      {/* citation to source */}
+      {CITES.map((c) => (
+        <path
+          key={c.cite}
+          d={`M ${c.x + 26} 130 C ${c.x + 150} 130, 250 ${SOURCES[c.doc].y + 11}, 352 ${
+            SOURCES[c.doc].y + 11
+          }`}
+          fill="none"
+          stroke={A}
+          strokeOpacity="0.4"
+          strokeWidth="1"
+        />
+      ))}
+
+      {/* the assistant's turn */}
+      <rect x="24" y="62" width="228" height="86" rx="2" fill={F} fillOpacity="0.05" stroke={L2} strokeWidth="1" />
+      {REPLY_LINES.map(([x, w], i) => (
+        <rect key={i} x={x} y={78 + i * 14} width={w} height="4" fill={F} fillOpacity="0.22" />
+      ))}
+      {CITES.map((c) => (
+        <g key={c.cite}>
+          <rect x={c.x} y="122" width="26" height="16" fill={A} fillOpacity="0.22" stroke={A} strokeOpacity="0.6" strokeWidth="1" />
+          <text x={c.x + 13} y="134" textAnchor="middle" className="font-mono" fill={A} fontSize="9">
+            {c.cite}
+          </text>
+        </g>
+      ))}
+
+      {/* the visitor's turns */}
+      {ASK.map((b, i) => (
+        <g key={i}>
+          <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="2" fill={A} fillOpacity="0.18" stroke={A} strokeOpacity="0.55" strokeWidth="1" />
+          {b.lines.map(([x, w], j) => (
+            <rect key={j} x={x} y={b.y + 10 + j * 10} width={w} height="4" fill={A} fillOpacity="0.5" />
+          ))}
+        </g>
+      ))}
+
+      <text x="24" y="224" className="font-mono" fill={M} fontSize="8" letterSpacing="1.4">
+        ANSWER TRACED TO SOURCE
+      </text>
+    </>
+  )
+}
+
 const MAP = {
+  chat: Chat,
   retrieval: Retrieval,
   timeseries: TimeSeries,
   market: Market,
@@ -310,7 +396,9 @@ const MAP = {
  * grade in .shot only has to pull the hue into the palette.
  *
  * A project with only one skin therefore falls back to the drawing in the
- * other theme rather than showing a screenshot fighting the page.
+ * other theme rather than showing a screenshot fighting the page — and a
+ * project whose interface has no second skin at all passes a single path,
+ * which is served in both, the veil in .shot-veil carrying it across.
  */
 export default function ProjectVisual({ kind, shot, fit = 'cover', className = '' }) {
   const theme = useThemeName()
@@ -318,7 +406,10 @@ export default function ProjectVisual({ kind, shot, fit = 'cover', className = '
 
   if (src) {
     return (
-      <div className={`relative overflow-hidden bg-raised ${className}`} aria-hidden="true">
+      <div
+        className={`shot-frame relative overflow-hidden bg-raised ${className}`}
+        aria-hidden="true"
+      >
         <img
           src={src}
           alt=""
@@ -328,6 +419,7 @@ export default function ProjectVisual({ kind, shot, fit = 'cover', className = '
             fit === 'contain' ? 'object-contain' : 'object-cover object-top'
           }`}
         />
+        <span className="shot-veil pointer-events-none absolute inset-0" />
       </div>
     )
   }
