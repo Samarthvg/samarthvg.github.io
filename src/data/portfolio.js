@@ -264,7 +264,12 @@ export const projects = [
     ],
     stack: ['Java', 'Swing', 'MVC', 'Alpha Vantage'],
     visual: 'market',
-    shot: { dark: '/shots/market-dark.webp', light: '/shots/market-light.webp' },
+    // Dark only, deliberately. The Swing light theme this chart renders in is
+    // a grey ground with blue gridlines and black-outlined candles, which
+    // fights the warm paper it would be served on. With no light shot,
+    // ProjectVisual falls back to the drawn chart, which is already built out
+    // of the palette and tracks whichever season is on.
+    shot: { dark: '/shots/market-dark.webp' },
     github: '',
     demo: '',
   },
