@@ -333,9 +333,18 @@
   }
 }
 
+/* The stone's bloom. On the dark ground this is light being added to
+   darkness and a little goes a long way; on paper there is no light left to
+   add, so the same value is a stain nobody sees and it has to be laid on
+   roughly twice as thick to register as a wash at all. */
 .staff-halo {
+  --halo-a: 0.16;
+  background: rgb(var(--c-gem) / var(--halo-a));
   animation: halo-breathe 7s ease-in-out infinite;
   will-change: transform, opacity;
+}
+[data-theme='light'] .staff-halo {
+  --halo-a: 0.3;
 }
 @keyframes halo-breathe {
   0%,
