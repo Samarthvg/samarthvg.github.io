@@ -3,10 +3,10 @@ import { useThemeName } from '../lib/theme'
 import AsciiArt from './AsciiArt'
 
 // Frieren's staff, colour-keyed out of a render. The two layers are
-// cell-aligned halves of one grid: the metal in the page's ink, so it
-// re-tints with the theme, and the stone and its ribbon in --c-gem, which
-// does not. Those are red in the object itself, and a staff whose stone
-// changes colour with the page is a swatch, not a staff.
+// cell-aligned halves of one grid: the rod gilt in --c-rod, the stone and
+// its ribbon in --c-gem. Neither follows the accent. The object is gilt
+// with a red stone, and a staff that repaints itself with the page is a
+// swatch, not a staff.
 const W = Math.max(...METAL.map((r) => r.length), ...GEM.map((r) => r.length))
 const H = Math.max(METAL.length, GEM.length)
 
@@ -73,11 +73,11 @@ const extend = (rows) => {
 // pair is drawn off darkness instead, the way a pencil sketch works.
 const ART = {
   dark: [
-    { art: extend(METAL), tone: 'text-bone/85' },
+    { art: extend(METAL), tone: 'text-rod' },
     { art: extend(GEM), tone: 'text-gem staff-gem' },
   ],
   light: [
-    { art: extend(METAL_LIGHT), tone: 'text-bone/85' },
+    { art: extend(METAL_LIGHT), tone: 'text-rod' },
     { art: extend(GEM_LIGHT), tone: 'text-gem staff-gem' },
   ],
 }
