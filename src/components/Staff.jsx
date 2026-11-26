@@ -145,12 +145,17 @@ export default function Staff() {
 
       {/* Attributed to Himmel alone. Naming the series would explain the joke;
           anyone who knows it will place the staff from the line. */}
-      <figcaption className="ml-auto mt-1 max-w-[30ch] text-right">
-        <p className="font-serif text-[13px] italic leading-snug text-muted sm:text-sm">
+      {/* Set to be read, not just to be there. Instrument Serif is a high
+          contrast face whose hairlines thin out badly at small sizes, and in
+          italic at 13px in the secondary tone this was a grey smudge. It
+          carries the page's own ink now, a size up, with the leading opened
+          to suit the italic. */}
+      <figcaption className="ml-auto mt-3 max-w-[34ch] text-right">
+        <p className="font-serif text-[15px] italic leading-[1.5] text-bone/90 sm:text-base">
           “It’s not a matter of what exists. What matters is doing what I can for the people
           standing right in front of me”
         </p>
-        <p className="eyebrow mt-2">Himmel</p>
+        <p className="eyebrow mt-2.5">Himmel</p>
       </figcaption>
     </figure>
   )

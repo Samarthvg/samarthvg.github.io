@@ -75,6 +75,7 @@ export default function ProjectDetail({ project: p, onClose }) {
             shot={p.shot}
             fit="contain"
             veil={false}
+            sizes="(min-width: 640px) 760px, 92vw"
             className="aspect-[2/1] max-h-[min(42vh,400px)]"
           />
 

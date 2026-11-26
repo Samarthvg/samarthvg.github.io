@@ -400,11 +400,33 @@ const MAP = {
  * project whose interface has no second skin at all passes a single path,
  * which is served in both, the veil in .shot-veil carrying it across.
  */
-export default function ProjectVisual({ kind, shot, fit = 'cover', veil = true, className = '' }) {
+/**
+ * Every shot in public/shots is authored at 1040w with 520w and 780w
+ * companions beside it. The widths come from what the layout actually asks
+ * for, measured: a card never renders wider than 363 CSS px and the detail
+ * panel never wider than 756. So the full file is about three times the
+ * pixels a card can show at 1x and still half again too many at 2x. srcset
+ * lets the browser take 520 for a plain card, 780 for a retina card or the
+ * detail panel, and the full file only where it is genuinely needed.
+ */
+const TIERS = (src) =>
+  src.endsWith('.webp')
+    ? `${src.replace(/\.webp$/, '-sm.webp')} 520w, ${src.replace(/\.webp$/, '-md.webp')} 780w, ${src} 1040w`
+    : null
+
+export default function ProjectVisual({
+  kind,
+  shot,
+  fit = 'cover',
+  veil = true,
+  sizes = '(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw',
+  className = '',
+}) {
   const theme = useThemeName()
   const src = typeof shot === 'string' ? shot : shot && shot[theme]
 
   if (src) {
+    const srcSet = TIERS(src)
     return (
       <div
         className={`relative overflow-hidden bg-raised ${veil ? 'shot-frame' : ''} ${className}`}
@@ -412,6 +434,8 @@ export default function ProjectVisual({ kind, shot, fit = 'cover', veil = true, 
       >
         <img
           src={src}
+          srcSet={srcSet || undefined}
+          sizes={srcSet ? sizes : undefined}
           alt=""
           loading="lazy"
           decoding="async"
