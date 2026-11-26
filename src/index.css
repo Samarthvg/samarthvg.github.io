@@ -164,6 +164,11 @@
 }
 
 /* ── ambient petals ──────────────────────────────── */
+/* Loose curved petals at many scales rather than whole blooms: the field is
+   the drift, not the flowers. The silhouette is a mask so one shape serves
+   all three tones, and the fall and the sway are two nested keyframes on
+   transform, so none of it reaches the main thread after mount. */
+
 .petal-field .fall {
   position: absolute;
   top: 0;
@@ -178,9 +183,29 @@
 .petal-field .leaf {
   display: block;
   width: var(--size);
-  height: var(--size);
-  border-radius: 50% 0 50% 50%;
-  background: rgb(var(--c-accent2) / var(--o));
+  height: calc(var(--size) * 1.8);
+  opacity: var(--o);
+  transform: rotate(var(--tilt));
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 44'><path d='M13.5 0.5C21 11 23.5 26 12.6 41.6C11.4 43.4 9.6 43.6 8.4 42C-1.5 28.6 3 11 13.5 0.5Z' fill='black'/></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 44'><path d='M13.5 0.5C21 11 23.5 26 12.6 41.6C11.4 43.4 9.6 43.6 8.4 42C-1.5 28.6 3 11 13.5 0.5Z' fill='black'/></svg>");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.petal-field .leaf--violet {
+  background: rgb(var(--c-accent));
+}
+.petal-field .leaf--gold {
+  background: rgb(var(--c-accent2));
+}
+.petal-field .leaf--pale {
+  background: rgb(var(--c-bone));
+}
+
+/* On paper the same alphas wash out, so the whole field is taken up a step. */
+[data-theme='light'] .petal-field .leaf {
+  opacity: calc(var(--o) * 1.5);
 }
 
 @keyframes petal-drift {
@@ -408,249 +433,6 @@
   50% {
     opacity: 0.8;
     transform: translate3d(0, -3px, 0) scale(1);
-  }
-}
-
-/* ── wave field ──────────────────────────────────── */
-/* The ambient ground behind everything. Two things keep it from becoming
-   wallpaper: it is held at a few percent so it reads as texture rather than
-   pattern, and it is masked away toward the top, where the name and the
-   section headings need clean ground. Only transform animates, so each band
-   is a composited layer and the paint happens once. */
-
-.wave-field {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 38%, black 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 38%, black 100%);
-}
-
-.wave-svg {
-  position: absolute;
-  bottom: -4%;
-  left: 0;
-  width: 200%;
-  height: 92%;
-}
-
-.wave {
-  will-change: transform;
-}
-.wave path {
-  vector-effect: non-scaling-stroke;
-  fill: none;
-}
-
-/* Each band drifts by exactly one period, so the loop has no seam. Different
-   durations are what give the three depths their parallax. */
-.wave--far path {
-  stroke: rgb(var(--c-accent) / 0.1);
-  stroke-width: 1;
-}
-.wave--mid path {
-  stroke: rgb(var(--c-accent2) / 0.1);
-  stroke-width: 1.2;
-}
-.wave--near path {
-  stroke: rgb(var(--c-accent) / 0.16);
-  stroke-width: 1.4;
-}
-
-.wave--far {
-  animation: wave-drift 64s linear infinite;
-}
-.wave--mid {
-  animation: wave-drift 42s linear infinite reverse;
-}
-.wave--near {
-  animation: wave-drift 28s linear infinite;
-}
-
-@keyframes wave-drift {
-  to {
-    transform: translate3d(-600px, 0, 0);
-  }
-}
-
-/* On paper the same alphas disappear, so the ink is taken up rather than the
-   pattern made busier. */
-[data-theme='light'] .wave--far path {
-  stroke: rgb(var(--c-accent) / 0.16);
-}
-[data-theme='light'] .wave--mid path {
-  stroke: rgb(var(--c-accent2) / 0.16);
-}
-[data-theme='light'] .wave--near path {
-  stroke: rgb(var(--c-accent) / 0.24);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wave {
-    animation: none;
-  }
-}
-
-/* ── now playing ─────────────────────────────────── */
-/* A lit window with rain on it. Three layers over the cover art:
-   a heavy blur for the colour, an SVG turbulence displacement for the way
-   water bends what is behind it, and a few soft vertical runs. Only the runs
-   move, and only by transform, so the expensive parts rasterise once. */
-
-.np {
-  width: 100%;
-  max-width: 340px;
-}
-
-.np-pane {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  border: 1px solid var(--c-line);
-  background: rgb(var(--c-panel));
-  transition: border-color 0.4s ease;
-}
-.np-pane:hover {
-  border-color: var(--c-line2);
-}
-
-.np-wash,
-.np-drops,
-.np-runs,
-.np-frost {
-  position: absolute;
-  inset: -12%;
-  pointer-events: none;
-}
-
-/* the colour: the cover, blown up and thrown out of focus */
-.np-wash {
-  background-position: center;
-  background-size: cover;
-  filter: blur(26px) saturate(1.45);
-  opacity: 0.62;
-  transform: scale(1.18);
-}
-[data-theme='light'] .np-wash {
-  opacity: 0.46;
-  filter: blur(26px) saturate(1.3) brightness(1.1);
-}
-
-/* The beading. A turbulence field baked into the image itself rather than an
-   SVG filter reference: backdrop-filter: url() is not reliably supported, and
-   a data URI rasterises once and then costs nothing. */
-.np-drops {
-  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='d'><feTurbulence type='fractalNoise' baseFrequency='0.14' numOctaves='2' seed='11'/><feColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 3.6 0 0 0 -1.7'/><feGaussianBlur stdDeviation='1.1'/></filter><rect width='100%25' height='100%25' filter='url%28%23d%29'/></svg>");
-  background-size: 220px 220px;
-  opacity: 0.3;
-  mix-blend-mode: screen;
-}
-[data-theme='light'] .np-drops {
-  opacity: 0.4;
-  mix-blend-mode: overlay;
-}
-
-/* a few runs down the glass */
-.np-runs {
-  background-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(255 255 255 / 0.1) 18%,
-      transparent 42%
-    ),
-    linear-gradient(to bottom, transparent 30%, rgb(255 255 255 / 0.07) 58%, transparent 86%);
-  background-size: 2px 60%, 1px 48%;
-  background-position: 22% -20%, 68% -20%;
-  background-repeat: no-repeat;
-  filter: blur(1px);
-}
-.np-runs--live {
-  animation: np-run 9s linear infinite;
-}
-@keyframes np-run {
-  to {
-    transform: translate3d(0, 46%, 0);
-  }
-}
-
-/* the glass itself, which is what keeps the type legible over all of it */
-.np-frost {
-  background: rgb(var(--c-panel) / 0.62);
-}
-
-.np-body {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-}
-
-.np-art {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  object-fit: cover;
-  border: 1px solid var(--c-line);
-}
-
-.np-label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  /* muted, not faint: over a saturated cover the faint tone measured 4.0
-     against the wash, where muted holds 4.6 */
-  color: rgb(var(--c-muted));
-}
-
-.np-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 99px;
-  background: rgb(var(--c-accent));
-  animation: np-pulse 2.4s ease-in-out infinite;
-}
-@keyframes np-pulse {
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.np-title,
-.np-artist {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.np-title {
-  margin-top: 5px;
-  font-size: 14px;
-  color: rgb(var(--c-bone));
-  transition: color 0.3s ease;
-}
-.np-pane:hover .np-title {
-  color: rgb(var(--c-accent));
-}
-.np-artist {
-  margin-top: 2px;
-  font-size: 12.5px;
-  color: rgb(var(--c-muted));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .np-runs--live,
-  .np-dot {
-    animation: none;
   }
 }
 

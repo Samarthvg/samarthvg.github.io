@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { FileText, Github, Linkedin, Mail } from 'lucide-react'
 import { links, profile } from '../data/portfolio'
 import { EASE, IconLink } from './ui'
-import NowPlaying from './NowPlaying'
 import Staff from './Staff'
 
 const rise = (delay) => ({
@@ -77,15 +76,6 @@ export default function Hero() {
               {socials.map((s) => (
                 <IconLink key={s.label} {...s} external={s.label !== 'Email'} />
               ))}
-            </motion.div>
-
-            {/* Fills the quiet corner under the socials, and brings the one
-                colour on this page that is not a palette token: whatever
-                cover happens to be playing. It renders nothing until the
-                feed answers, so a slow or dead Worker leaves the hero as it
-                was rather than parking an empty card here. */}
-            <motion.div {...rise(0.44)} className="mt-12">
-              <NowPlaying />
             </motion.div>
           </div>
 
