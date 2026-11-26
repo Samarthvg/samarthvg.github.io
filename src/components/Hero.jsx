@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { FileText, Github, Linkedin, Mail } from 'lucide-react'
 import { links, profile } from '../data/portfolio'
 import { EASE, IconLink } from './ui'
+import { Sigil } from './Sigils'
 import Staff from './Staff'
 
 const rise = (delay) => ({
@@ -23,7 +24,11 @@ export default function Hero() {
     i === -1 ? [profile.tagline.length, profile.tagline.length] : [i, i + profile.taglineAccent.length]
 
   return (
-    <section id="top" className="relative min-h-[100svh] pt-24 sm:pt-28">
+    <section id="top" className="relative isolate min-h-[100svh] overflow-hidden pt-24 sm:pt-28">
+      {/* isolate plus -z-10 keeps this inside the section's own stacking
+          context, so it is behind the staff and the copy but still in front
+          of the page backdrop */}
+      <Sigil className="sg--hero -z-10" spin={240} counter={170} />
       <div className="shell flex min-h-[calc(100svh-7rem)] flex-col justify-center pb-16">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.62fr)] lg:gap-12">
           <div className="order-2 lg:order-1">

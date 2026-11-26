@@ -4,6 +4,7 @@ import { ArrowUpRight, FileText, Github, Linkedin } from 'lucide-react'
 import { links, profile } from '../data/portfolio'
 import { EASE, Reveal, SectionHead } from './ui'
 import Approaching from './Approaching'
+import { Sigil } from './Sigils'
 
 /** No backend — this composes the mail and hands it to the visitor's client. */
 function MailNote() {
@@ -73,7 +74,11 @@ const channels = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative pb-14 pt-24 sm:pt-32 lg:pt-40">
+    <section
+      id="contact"
+      className="relative isolate overflow-hidden pb-14 pt-24 sm:pt-32 lg:pt-40"
+    >
+      <Sigil className="sg--contact -z-10" spin={300} counter={200} />
       <div className="shell">
         <SectionHead index="05" title="Contact" note={profile.status} />
 

@@ -231,6 +231,96 @@
   }
 }
 
+/* ── spell circles ───────────────────────────────── */
+/* Two of them, each placed in a section with room for it rather than fixed
+   behind the page. No page-wide fade: the sections that carry dense copy or
+   imagery simply do not have one. Each circle still dissolves on a diagonal,
+   so it surfaces on one side and runs out on the other instead of sitting
+   there as a complete hard ring. */
+
+.sg {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sg--hero {
+  width: 86vmin;
+  height: 86vmin;
+  right: -16vmin;
+  top: 50%;
+  margin-top: -43vmin;
+  -webkit-mask-image: linear-gradient(210deg, black 6%, transparent 72%);
+  mask-image: linear-gradient(210deg, black 6%, transparent 72%);
+}
+
+.sg--contact {
+  width: 54vmin;
+  height: 54vmin;
+  right: 2vmin;
+  bottom: 6vh;
+  -webkit-mask-image: linear-gradient(330deg, black 8%, transparent 76%);
+  mask-image: linear-gradient(330deg, black 8%, transparent 76%);
+}
+
+.sg-turn {
+  transform-origin: 100px 100px;
+  animation: sg-spin var(--spin-dur) linear infinite;
+  will-change: transform;
+}
+.sg-turn--back {
+  animation-direction: reverse;
+}
+@keyframes sg-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sg-hair,
+.sg-ring,
+.sg-dash,
+.sg-tick {
+  stroke: rgb(var(--c-accent) / 0.26);
+  vector-effect: non-scaling-stroke;
+  fill: none;
+}
+.sg-hair {
+  stroke-width: 0.5;
+}
+.sg-ring {
+  stroke-width: 0.9;
+}
+.sg-tick {
+  stroke-width: 0.7;
+}
+.sg-dash {
+  stroke-width: 0.8;
+  stroke-dasharray: 5 9;
+}
+.sg-gold {
+  stroke: rgb(var(--c-accent2) / 0.28);
+}
+.sg-node {
+  fill: rgb(var(--c-accent2) / 0.32);
+}
+
+[data-theme='light'] .sg-hair,
+[data-theme='light'] .sg-ring,
+[data-theme='light'] .sg-dash,
+[data-theme='light'] .sg-tick {
+  stroke: rgb(var(--c-accent) / 0.3);
+}
+[data-theme='light'] .sg-gold {
+  stroke: rgb(var(--c-accent2) / 0.32);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sg-turn {
+    animation: none;
+  }
+}
+
 /* ── staff ───────────────────────────────────────── */
 /* Motes lifting off the orb, and a slow breath on the glass and the halo.
    Transform and opacity only, so all of it stays on the compositor and none
