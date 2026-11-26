@@ -29,6 +29,7 @@ export default function Hero() {
           context, so it is behind the staff and the copy but still in front
           of the page backdrop */}
       <Sigil className="sg--hero -z-10" spin={240} counter={170} />
+      <Sigil className="sg--hero-left -z-10" spin={330} counter={225} />
       <div className="shell flex min-h-[calc(100svh-7rem)] flex-col justify-center pb-16">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.62fr)] lg:gap-12">
           <div className="order-2 lg:order-1">

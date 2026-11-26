@@ -163,74 +163,6 @@
   }
 }
 
-/* ── ambient petals ──────────────────────────────── */
-/* Loose curved petals at many scales rather than whole blooms: the field is
-   the drift, not the flowers. The silhouette is a mask so one shape serves
-   all three tones, and the fall and the sway are two nested keyframes on
-   transform, so none of it reaches the main thread after mount. */
-
-.petal-field .fall {
-  position: absolute;
-  top: 0;
-  left: var(--x);
-  animation: petal-drift var(--dur) linear var(--delay) infinite;
-  will-change: transform;
-}
-.petal-field .sway {
-  animation: petal-sway var(--sway-dur) ease-in-out var(--delay) infinite alternate;
-  will-change: transform;
-}
-.petal-field .leaf {
-  display: block;
-  width: var(--size);
-  height: calc(var(--size) * 1.8);
-  opacity: var(--o);
-  transform: rotate(var(--tilt));
-  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 44'><path d='M13.5 0.5C21 11 23.5 26 12.6 41.6C11.4 43.4 9.6 43.6 8.4 42C-1.5 28.6 3 11 13.5 0.5Z' fill='black'/></svg>");
-  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 44'><path d='M13.5 0.5C21 11 23.5 26 12.6 41.6C11.4 43.4 9.6 43.6 8.4 42C-1.5 28.6 3 11 13.5 0.5Z' fill='black'/></svg>");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-}
-.petal-field .leaf--violet {
-  background: rgb(var(--c-accent));
-}
-.petal-field .leaf--gold {
-  background: rgb(var(--c-accent2));
-}
-.petal-field .leaf--pale {
-  background: rgb(var(--c-bone));
-}
-
-/* On paper the same alphas wash out, so the whole field is taken up a step. */
-[data-theme='light'] .petal-field .leaf {
-  opacity: calc(var(--o) * 1.5);
-}
-
-@keyframes petal-drift {
-  0% {
-    transform: translate3d(0, -14vh, 0) rotate(0deg);
-  }
-  100% {
-    transform: translate3d(0, 114vh, 0) rotate(var(--spin));
-  }
-}
-@keyframes petal-sway {
-  0% {
-    transform: translate3d(-1.6vw, 0, 0);
-  }
-  100% {
-    transform: translate3d(1.6vw, 0, 0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .petal-field {
-    display: none;
-  }
-}
-
 /* ── spell circles ───────────────────────────────── */
 /* Two of them, each placed in a section with room for it rather than fixed
    behind the page. No page-wide fade: the sections that carry dense copy or
@@ -244,14 +176,29 @@
   pointer-events: none;
 }
 
+/* The fade carries much further than it did. At transparent by 72% most of
+   the ring had gone and what was left read as a stray arc; it runs to the
+   edge now, so the figure survives and only its far side thins out. */
 .sg--hero {
   width: 86vmin;
   height: 86vmin;
   right: -16vmin;
   top: 50%;
   margin-top: -43vmin;
-  -webkit-mask-image: linear-gradient(210deg, black 6%, transparent 72%);
-  mask-image: linear-gradient(210deg, black 6%, transparent 72%);
+  -webkit-mask-image: linear-gradient(210deg, black 42%, transparent 96%);
+  mask-image: linear-gradient(210deg, black 42%, transparent 96%);
+}
+
+/* The second circle, low on the left. It sits under the copy's bottom edge
+   and runs off the corner, so it fills that dead quarter without climbing
+   into the name or the paragraph. */
+.sg--hero-left {
+  width: 54vmin;
+  height: 54vmin;
+  left: -22vmin;
+  bottom: -14vmin;
+  -webkit-mask-image: linear-gradient(28deg, black 46%, transparent 97%);
+  mask-image: linear-gradient(28deg, black 46%, transparent 97%);
 }
 
 .sg--contact {
@@ -259,8 +206,8 @@
   height: 54vmin;
   right: 2vmin;
   bottom: 6vh;
-  -webkit-mask-image: linear-gradient(330deg, black 8%, transparent 76%);
-  mask-image: linear-gradient(330deg, black 8%, transparent 76%);
+  -webkit-mask-image: linear-gradient(330deg, black 44%, transparent 96%);
+  mask-image: linear-gradient(330deg, black 44%, transparent 96%);
 }
 
 .sg-turn {
