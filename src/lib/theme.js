@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 // Only the browser-chrome colour lives here; every pigment is in
 // src/index.css under [data-theme]. Changing a colour means touching one
 // file, and there is no second copy to fall behind.
-const CHROME = { dark: '#141310', light: '#E4DCCB' }
+const CHROME = { dark: '#1A191D', light: '#E8E5E1' }
 
 /**
  * Read-only view of the current theme, for components that need to render
