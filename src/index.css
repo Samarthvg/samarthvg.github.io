@@ -164,22 +164,35 @@
 }
 
 /* ── spell circles ───────────────────────────────── */
-/* Two of them, each placed in a section with room for it rather than fixed
-   behind the page. No page-wide fade: the sections that carry dense copy or
-   imagery simply do not have one. Each circle still dissolves on a diagonal,
-   so it surfaces on one side and runs out on the other instead of sitting
-   there as a complete hard ring. */
+/* One set, fixed to the viewport, so the same two circles stay put while the
+   page moves behind them. Each dissolves on a diagonal, so it surfaces on one
+   side and thins out on the other rather than sitting there as a complete
+   hard ring.
+
+   The whole field steps aside over About: that section's clip is about a
+   quarter opaque, so rings behind it read through the picture no matter how
+   far back they sit. Opacity only, and slow enough to read as the circles
+   withdrawing rather than as a light being switched off. */
+
+.sg-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sg-field--dim {
+  opacity: 0;
+}
 
 .sg {
   position: absolute;
   overflow: visible;
-  pointer-events: none;
 }
 
-/* The fade carries much further than it did. At transparent by 72% most of
-   the ring had gone and what was left read as a stray arc; it runs to the
-   edge now, so the figure survives and only its far side thins out. */
-.sg--hero {
+/* the large one sits where the staff is, so the hero reads as a circle drawn
+   round the figure */
+.sg--a {
   width: 86vmin;
   height: 86vmin;
   right: -16vmin;
@@ -189,25 +202,13 @@
   mask-image: linear-gradient(210deg, black 42%, transparent 96%);
 }
 
-/* The second circle, low on the left. It sits under the copy's bottom edge
-   and runs off the corner, so it fills that dead quarter without climbing
-   into the name or the paragraph. */
-.sg--hero-left {
+.sg--b {
   width: 54vmin;
   height: 54vmin;
   left: -22vmin;
   bottom: -14vmin;
   -webkit-mask-image: linear-gradient(28deg, black 46%, transparent 97%);
   mask-image: linear-gradient(28deg, black 46%, transparent 97%);
-}
-
-.sg--contact {
-  width: 54vmin;
-  height: 54vmin;
-  right: 2vmin;
-  bottom: 6vh;
-  -webkit-mask-image: linear-gradient(330deg, black 44%, transparent 96%);
-  mask-image: linear-gradient(330deg, black 44%, transparent 96%);
 }
 
 .sg-turn {

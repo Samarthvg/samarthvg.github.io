@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
+
 /**
- * A spell circle, turning slowly behind a section.
+ * The spell circles: one set, fixed behind the whole page.
  *
  * Drawn as clockwork rather than as occultism: concentric rings, a collar of
  * fine ticks, a dashed register and an inscribed polygon, which is the
@@ -7,13 +9,16 @@
  * Two counter-rotating halves, so the rings shear against each other and it
  * never looks like a single turning wheel.
  *
- * Placed per section rather than fixed behind the whole page. Run page-wide
- * it crossed the copy everywhere, and on About it drew straight through the
- * clip — which cannot be fixed by sending it further back, because that clip
- * is only a quarter opaque and the rings simply read through it. So it lives
- * where there is room for it instead: behind the staff, where a circle round
- * a mage's staff is the one place it is obviously at home, and in the empty
- * half of Contact.
+ * One set for the whole site rather than a figure per section: fixed to the
+ * viewport, so the same circles stay put as the page moves behind them and
+ * they read as the room the site is in rather than as decoration repeated
+ * section by section. In the hero that puts the large one round the staff,
+ * which is where a circle round a mage's staff belongs anyway.
+ *
+ * About is the one place it cannot stay. That section's clip is only about a
+ * quarter opaque, so rings behind it read straight through the picture, and
+ * no amount of stacking order fixes that. So the field watches for About and
+ * takes itself out of the way while it is on screen.
  */
 
 const TICKS = (n, r, len) =>
@@ -30,7 +35,7 @@ const POLY = (n, r, rot = 0) =>
     return `${(100 + Math.cos(a) * r).toFixed(1)},${(100 + Math.sin(a) * r).toFixed(1)}`
   }).join(' ')
 
-export function Sigil({ className, spin = 240, counter = 170 }) {
+function Sigil({ className, spin = 240, counter = 170 }) {
   return (
     <svg className={`sg ${className}`} viewBox="0 0 200 200" fill="none" aria-hidden="true">
       <g className="sg-turn" style={{ '--spin-dur': `${spin}s` }}>
@@ -61,5 +66,29 @@ export function Sigil({ className, spin = 240, counter = 170 }) {
         })}
       </g>
     </svg>
+  )
+}
+
+export default function Sigils() {
+  const [dim, setDim] = useState(false)
+
+  useEffect(() => {
+    const about = document.getElementById('about')
+    if (!about) return
+    // The margins mean the fade starts as About takes the middle of the
+    // screen rather than the instant its top edge appears, so the circles
+    // are gone by the time there is anything to read over.
+    const io = new IntersectionObserver(([e]) => setDim(e.isIntersecting), {
+      rootMargin: '-28% 0px -28% 0px',
+    })
+    io.observe(about)
+    return () => io.disconnect()
+  }, [])
+
+  return (
+    <div className={`sg-field ${dim ? 'sg-field--dim' : ''}`} aria-hidden="true">
+      <Sigil className="sg--a" spin={240} counter={170} />
+      <Sigil className="sg--b" spin={330} counter={225} />
+    </div>
   )
 }
