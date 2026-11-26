@@ -467,27 +467,14 @@ html.has-custom-cursor * {
   scale: 1.1;
 }
 
+/* Size and motion are set by Cursor.jsx through the Web Animations API, so
+   there are no keyframes here and no custom properties to churn per petal. */
 .petal {
   position: fixed;
   top: 0;
   left: 0;
-  width: var(--size);
-  height: var(--size);
   border-radius: 50% 0 50% 50%;
   background: rgb(var(--c-accent2));
   will-change: transform, opacity;
   opacity: 0;
-  transform: translate3d(var(--px), var(--py), 0);
-}
-
-@keyframes petal-fall {
-  0% {
-    opacity: 0.85;
-    transform: translate3d(var(--px), var(--py), 0) rotate(0deg) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(calc(var(--px) + var(--dx)), calc(var(--py) + var(--dy)), 0)
-      rotate(var(--rot)) scale(0.75);
-  }
 }

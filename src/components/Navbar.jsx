@@ -48,8 +48,12 @@ export default function Navbar() {
         className="fixed inset-x-0 top-0 z-[100]"
       >
         <div
-          className={`transition-[background-color,border-color,backdrop-filter] duration-500 ${
-            scrolled ? 'border-b border-line bg-ink/70 backdrop-blur-xl' : 'border-b border-transparent'
+          className={`transition-[background-color,border-color] duration-500 ${
+            // Opacity rather than backdrop-blur. A blur behind a fixed header
+            // is re-sampled and re-blurred for every pixel the page scrolls,
+            // which is most of what made scrolling stutter; at this opacity
+            // the frosting was barely legible anyway.
+            scrolled ? 'border-b border-line bg-ink/92' : 'border-b border-transparent'
           }`}
         >
           <div className="shell flex h-16 items-center justify-between sm:h-[72px]">

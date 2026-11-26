@@ -4,8 +4,16 @@ import { useHasFinePointer } from '../lib/hooks'
 
 // Giorno's brooch stands in for the pointer, with petals falling behind it.
 // Both take their colour from the accent, so they follow the theme.
-const POOL = 14
+//
+// The pool has to outlast the spawn rate or the trail eats itself. A petal
+// lives LIFE ms, and a fast sweep covers STEP px many times inside that,
+// so a pool of 14 was being recycled several times over per petal-lifetime:
+// every reuse yanks a mid-flight petal back to the cursor, which is why the
+// trail kept thinning out or vanishing at speed. GAP caps the rate at about
+// 22 live petals, and the pool is sized above that with room to spare.
+const POOL = 30
 const STEP = 22 // px of travel before another petal drops
+const GAP = 45 // ms floor between petals, so speed cannot exhaust the pool
 const LIFE = 1000
 const HOVERABLE = 'a,button,input,textarea,select,summary,[role="button"],[role="tab"]'
 
@@ -35,11 +43,13 @@ export default function Cursor() {
           return el
         })
 
+    const anims = new Array(POOL).fill(null)
     let visible = false
     let over = false
     let next = 0
     let lastX = 0
     let lastY = 0
+    let lastAt = 0
     let primed = false
 
     const onMove = (e) => {
@@ -70,20 +80,37 @@ export default function Cursor() {
         return
       }
       if (Math.hypot(x - lastX, y - lastY) < STEP) return
+      const now = e.timeStamp
+      if (now - lastAt < GAP) return
+      lastAt = now
       lastX = x
       lastY = y
 
-      const el = petals[next++ % POOL]
+      const i = next++ % POOL
+      const el = petals[i]
       const r = Math.random()
-      el.style.setProperty('--size', `${5 + r * 4}px`)
-      el.style.setProperty('--px', `${x}px`)
-      el.style.setProperty('--py', `${y}px`)
-      el.style.setProperty('--dx', `${(r - 0.5) * 26}px`)
-      el.style.setProperty('--dy', `${18 + r * 16}px`)
-      el.style.setProperty('--rot', `${(r - 0.5) * 90}deg`)
-      el.style.animation = 'none'
-      void el.offsetWidth // restart the keyframes
-      el.style.animation = `petal-fall ${LIFE}ms cubic-bezier(0.22,0.61,0.36,1) forwards`
+      const size = 5 + r * 4
+      const dx = (r - 0.5) * 26
+      const dy = 18 + r * 16
+      const rot = (r - 0.5) * 90
+
+      el.style.width = `${size}px`
+      el.style.height = `${size}px`
+      // Driven by the Web Animations API rather than restarted CSS keyframes:
+      // the old restart needed a forced reflow (void offsetWidth) on every
+      // petal to make the animation play again, which is a synchronous layout
+      // in the middle of a pointermove handler.
+      anims[i]?.cancel()
+      anims[i] = el.animate(
+        [
+          { opacity: 0.85, transform: `translate3d(${x}px, ${y}px, 0) rotate(0deg) scale(1)` },
+          {
+            opacity: 0,
+            transform: `translate3d(${x + dx}px, ${y + dy}px, 0) rotate(${rot}deg) scale(0.75)`,
+          },
+        ],
+        { duration: LIFE, easing: 'cubic-bezier(0.22,0.61,0.36,1)', fill: 'forwards' }
+      )
     }
 
     const hide = () => {
@@ -111,6 +138,7 @@ export default function Cursor() {
       window.removeEventListener('blur', hide)
       root.classList.remove('has-custom-cursor')
       brooch.remove()
+      anims.forEach((a) => a?.cancel())
       petals.forEach((p) => p.remove())
     }
   }, [fine, reduce])
