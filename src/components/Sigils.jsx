@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 /**
  * The spell circles: one set, fixed behind the whole page.
@@ -17,8 +17,9 @@ import { useEffect, useState } from 'react'
  *
  * About is the one place it cannot stay. That section's clip is only about a
  * quarter opaque, so rings behind it read straight through the picture, and
- * no amount of stacking order fixes that. So the field watches for About and
- * takes itself out of the way while it is on screen.
+ * no amount of stacking order fixes that. So the field withdraws for it —
+ * by how much of the screen About has actually taken, not by whether it has
+ * been seen at all. Entering the section is not the same as being in it.
  */
 
 const TICKS = (n, r, len) =>
@@ -70,23 +71,53 @@ function Sigil({ className, spin = 240, counter = 170 }) {
 }
 
 export default function Sigils() {
-  const [dim, setDim] = useState(false)
+  const ref = useRef(null)
 
   useEffect(() => {
     const about = document.getElementById('about')
-    if (!about) return
-    // The margins mean the fade starts as About takes the middle of the
-    // screen rather than the instant its top edge appears, so the circles
-    // are gone by the time there is anything to read over.
-    const io = new IntersectionObserver(([e]) => setDim(e.isIntersecting), {
-      rootMargin: '-28% 0px -28% 0px',
-    })
-    io.observe(about)
-    return () => io.disconnect()
+    const field = ref.current
+    if (!about || !field) return
+
+    // Where the fade runs. Below HOLD the circles are untouched, so arriving
+    // at About does nothing; across the next FADE of the screen they go.
+    const HOLD = 0.25
+    const FADE = 0.45
+
+    let raf = 0
+    let last = -1
+    const measure = () => {
+      raf = 0
+      const r = about.getBoundingClientRect()
+      const vh = window.innerHeight || 1
+      // the share of the viewport About currently covers, not the share of
+      // About that happens to be visible — a section taller than the screen
+      // would never finish by the latter
+      const covered = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0)) / vh
+      const t = Math.min(1, Math.max(0, (covered - HOLD) / FADE))
+      // Most of a scroll happens nowhere near About, where this resolves to
+      // the same 1 every frame. Writing it anyway dirties style for nothing.
+      const next = Math.round((1 - t) * 100) / 100
+      if (next === last) return
+      last = next
+      field.style.opacity = String(next)
+    }
+
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(measure)
+    }
+
+    measure()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [])
 
   return (
-    <div className={`sg-field ${dim ? 'sg-field--dim' : ''}`} aria-hidden="true">
+    <div ref={ref} className="sg-field" aria-hidden="true">
       <Sigil className="sg--a" spin={240} counter={170} />
       <Sigil className="sg--b" spin={330} counter={225} />
     </div>

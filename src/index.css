@@ -169,20 +169,16 @@
    side and thins out on the other rather than sitting there as a complete
    hard ring.
 
-   The whole field steps aside over About: that section's clip is about a
-   quarter opaque, so rings behind it read through the picture no matter how
-   far back they sit. Opacity only, and slow enough to read as the circles
-   withdrawing rather than as a light being switched off. */
+   The field withdraws over About, where the clip is only about a quarter
+   opaque and rings behind it read through the picture. Opacity is written
+   per frame from how much of the screen that section has taken, so there is
+   no transition here to fight it. */
 
 .sg-field {
   position: absolute;
   inset: 0;
   overflow: hidden;
   opacity: 1;
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.sg-field--dim {
-  opacity: 0;
 }
 
 .sg {
