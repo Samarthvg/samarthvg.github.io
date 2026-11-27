@@ -174,9 +174,17 @@
    per frame from how much of the screen that section has taken, so there is
    no transition here to fight it. */
 
+/* Height in svh rather than inset:0. The backdrop this sits in is the live
+   viewport, and on a phone that grows as the address bar rolls away mid
+   scroll — which moved anything positioned from its middle or its bottom and
+   read as the circles snapping. svh is the viewport with the browser's own
+   chrome showing, so it does not change while you scroll. */
 .sg-field {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100svh;
   overflow: hidden;
   opacity: 1;
 }
@@ -202,9 +210,20 @@
   width: 54vmin;
   height: 54vmin;
   left: -22vmin;
-  bottom: -14vmin;
+  top: calc(100% - 40vmin);
   -webkit-mask-image: linear-gradient(28deg, black 46%, transparent 97%);
   mask-image: linear-gradient(28deg, black 46%, transparent 97%);
+}
+
+/* On a phone the staff runs down most of the screen, and a circle whose top
+   edge lands in the middle of the crescent cuts the figure in half. Start it
+   where the rod meets the C instead, so it reads as drawn around the lower
+   staff rather than through the head of it. */
+@media (max-width: 767px) {
+  .sg--a {
+    top: 42%;
+    margin-top: 0;
+  }
 }
 
 .sg-turn {
