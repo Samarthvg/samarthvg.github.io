@@ -127,7 +127,11 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[95] bg-ink/95 backdrop-blur-xl md:hidden"
+            // Solid, and no backdrop blur. It was 95% opaque over a full-screen
+            // blur, which is a filter over the whole viewport to soften
+            // something already all but hidden — and it cost the one frame you
+            // feel, as the menu opens.
+            className="fixed inset-0 z-[95] bg-ink md:hidden"
           >
             <nav aria-label="Sections" className="shell flex h-full flex-col justify-center gap-1">
               {nav.map((item, i) => (

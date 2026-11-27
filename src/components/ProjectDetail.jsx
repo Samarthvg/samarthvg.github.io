@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ExternalLink, Github, X } from 'lucide-react'
 import { useKey, useScrollLock } from '../lib/hooks'
@@ -29,7 +30,12 @@ export default function ProjectDetail({ project: p, onClose }) {
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
   }
 
-  return (
+  // Portalled to the body on purpose. main is position:relative with z-10,
+  // which makes it a stacking context, so a z-index set in here is only ever
+  // compared against main's siblings' — and the header is one of those at
+  // z-100. Left in place the nav painted over the panel: on a phone its
+  // menu button sat exactly on the close button and swallowed the click.
+  return createPortal(
     <div className="fixed inset-0 z-[150] flex items-center justify-center p-0 sm:p-6 lg:p-10">
       <motion.div
         className="absolute inset-0 bg-ink/85 backdrop-blur-md"
@@ -141,6 +147,7 @@ export default function ProjectDetail({ project: p, onClose }) {
           </motion.div>
         </div>
       </motion.div>
-    </div>
+    </div>,
+    document.body
   )
 }
